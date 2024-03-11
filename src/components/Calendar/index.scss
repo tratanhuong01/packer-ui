@@ -1,0 +1,14 @@
+.list {
+  & > li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  display: grid;
+  &-day {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  }
+  &-month {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+}

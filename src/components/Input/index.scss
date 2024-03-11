@@ -1,0 +1,16 @@
+.input {
+  &__container {
+    & > div {
+      position: relative;
+    }
+    & > p.error {
+      color: red;
+    }
+
+    & input {
+      border: {
+        width: 0.1rem;
+      }
+    }
+  }
+}

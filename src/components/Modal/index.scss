@@ -1,0 +1,25 @@
+.zoomIn {
+  animation: zoomIn 300ms ease-in;
+}
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.zoomOut {
+  animation: zoomOut 50ms ease-out;
+}
+
+@keyframes zoomOut {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(0);
+  }
+}
