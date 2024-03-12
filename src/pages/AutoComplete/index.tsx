@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import ShowComponent from "../../components/ShowComponent";
+import ShowComponent from "../../modules/UI Components/components/ShowComponent";
 import * as code from "./code";
 import components from "./components";
 

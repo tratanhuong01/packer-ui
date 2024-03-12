@@ -1,5 +1,5 @@
 import Button from "../../components/Button";
-import ShowComponent from "../../components/ShowComponent";
+import ShowComponent from "../../modules/UI Components/components/ShowComponent";
 import { basicButton } from "./code";
 
 const ButtonPage = () => {

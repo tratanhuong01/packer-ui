@@ -1,13 +1,13 @@
-import Alert from "../components/Alert";
-import AutoComplete from "../components/AutoComplete";
-import Calendar from "../components/Calendar";
-import Rating from "../components/Rating";
-import RenderData from "../components/RenderData";
-import Table from "../components/Table";
-import TransferList from "../components/TransferList";
-import ShowComponent from "../modules/UI Components/components/ShowComponent";
+import Alert from "../../../../components/Alert";
+import AutoComplete from "../../../../components/AutoComplete";
+import Calendar from "../../../../components/Calendar";
+import Rating from "../../../../components/Rating";
+import RenderData from "../../../../components/RenderData";
+import Table from "../../../../components/Table";
+import TransferList from "../../../../components/TransferList";
+import ShowComponent from "../../components/ShowComponent";
 
-const Components = () => {
+const ListComponent = () => {
   return (
     <div>
       <p className="font-bold text-4xl mb-2 mt-8">AutoComplete</p>
@@ -128,4 +128,4 @@ const Components = () => {
   );
 };
 
-export default Components;
+export default ListComponent;

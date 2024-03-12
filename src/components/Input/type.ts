@@ -5,10 +5,14 @@ type InputProps = {
   className?: string;
   name?: string;
   value?: string | "";
-  handleChange?: Function;
+  handleChange?: (value: string) => void;
   handleClick?: Function;
   rounded?: "default" | "full";
   mode?: "normal" | "outlined" | "filled" | "standard";
+  spellcheck?: boolean;
+  width?: number;
+  height?: number;
+  error?: string;
 };
 
 export default InputProps;

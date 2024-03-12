@@ -1,4 +1,4 @@
-import ShowComponent from "../../components/ShowComponent";
+import ShowComponent from "../../modules/UI Components/components/ShowComponent";
 import { calendar } from "./code";
 import components from "./components";
 

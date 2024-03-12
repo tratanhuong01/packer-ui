@@ -1,5 +1,5 @@
 import Input from "../../components/Input";
-import ShowComponent from "../../components/ShowComponent";
+import ShowComponent from "../../modules/UI Components/components/ShowComponent";
 import * as code from "./code";
 
 //

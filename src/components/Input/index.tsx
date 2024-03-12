@@ -13,7 +13,18 @@ const Input = (props: InputProps) => {
     },
   });
   const mode = props.mode || "normal";
-  const { type, placeholder, className, rounded, handleClick } = props;
+  const {
+    type,
+    placeholder,
+    className,
+    rounded,
+    handleClick,
+    handleChange,
+    spellcheck,
+    width,
+    height,
+    error,
+  } = props;
   const [data, setData] = useState({
     showPassword: false,
   });
@@ -22,7 +33,11 @@ const Input = (props: InputProps) => {
   //
   return (
     <div ref={refContainer} className={`input__container ${className || ""}`}>
-      <div onClick={() => setIsFocus(true)} className="relative">
+      <div
+        onClick={() => setIsFocus(true)}
+        className="relative"
+        style={{ width, height }}
+      >
         {type === "search" && (
           <i
             className="bx bx-search absolute top-1/2 text-base text-gray-400 left-4 transform-y-center 
@@ -35,18 +50,23 @@ const Input = (props: InputProps) => {
             type === "password" ? (data.showPassword ? "text" : type) : type
           }
           value={value}
-          onChange={(e: ChangeEvent) =>
-            setValue((e.target as HTMLInputElement).value)
-          }
+          onChange={(e: ChangeEvent) => {
+            setValue((e.target as HTMLInputElement).value);
+            handleChange && handleChange((e.target as HTMLInputElement).value);
+          }}
           placeholder={mode === "normal" ? placeholder : ""}
-          className={`w-full ${
+          className={`w-full h-full bg-transparent ${
             mode === "normal" || mode === "outlined"
               ? "border-solid border-gray-200 border focus:border-blue-500"
+              : mode === "standard"
+              ? "border-b-8 border-transparent border-b-solid border-b-gray-400"
               : "border-none"
-          } py-2 lead-none ${rounded ? "rounded-full" : "rounded-sm"} ${
-            type === "search" ? "pl-10" : "pl-4"
-          } ${type === "password" ? "pr-12" : "pr-4"}`}
-          spellCheck={false}
+          } py-3 lead-none ${rounded ? "rounded-full" : "rounded-sm"} ${
+            type === "search" ? "pl-10" : mode !== "standard" ? "pl-2" : ""
+          } ${
+            type === "password" ? "pr-12" : mode !== "standard" ? "pr-4" : ""
+          }`}
+          spellCheck={spellcheck}
         />
         {mode !== "normal" && type !== "search" && (
           <span
@@ -54,9 +74,11 @@ const Input = (props: InputProps) => {
               setIsFocus(true);
               if (ref.current) ref.current.focus();
             }}
-            className={`absolute transform-y-center inline-block left-4 transition ${
+            className={`absolute transform-y-center inline-block ${
+              mode !== "standard" ? "left-2" : "left-0"
+            } transition ${
               isFocus || value.length > 0
-                ? "-top-0.5 text-sm bg-white py-0.5 px-1 text-blue-500 font-semibold"
+                ? "-top-0.5 text-sm bg-white py-0.5 px-1 text-blue-500 font-normal"
                 : "text-gray-500 opacity-80 pl-0.5 top-1/2"
             }`}
           >
@@ -75,7 +97,9 @@ const Input = (props: InputProps) => {
           ></i>
         )}
       </div>
-      {/* <p className="text-red-500 text-sm font-semibold mt-1">Field is empty.</p> */}
+      {error && (
+        <p className="text-red-500 text-sm font-semibold mt-1">{error}</p>
+      )}
     </div>
   );
 };

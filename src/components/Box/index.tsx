@@ -26,7 +26,7 @@ const Box = (props: BoxProps) => {
         rounded ? "rounded-full" : ""
       } flex justify-center items-center ${
         border || "border border-solid border-gray-100"
-      } ${disabled ? "cursor-not-allowed" : ""}`}
+      } ${disabled ? "cursor-not-allowed bg-gray-500" : ""}`}
     >
       {children}
     </div>

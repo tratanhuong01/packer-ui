@@ -1,7 +1,7 @@
 import {
   HistoryProps,
   MessageProps,
-} from "../../pages/ChatGPT/interfaces/Message";
+} from "../../modules/ChatGPT/interfaces/Message";
 
 type StateType = {
   historyList: HistoryProps[];

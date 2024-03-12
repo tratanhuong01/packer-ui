@@ -3,7 +3,7 @@ import { ChatGPTContext } from "../contexts/ChatGPTContext/ChatGPTContext";
 import {
   HistoryProps,
   MessageChildProps,
-} from "../pages/ChatGPT/interfaces/Message";
+} from "../modules/ChatGPT/interfaces/Message";
 
 type SearchDataResponse = {
   handleClick: (type: "stop" | "start") => void;

@@ -24,7 +24,7 @@ const VSCodeEditorMini = () => {
         <div className="flex items-center gap-3">
           <span className="bx bx-left-arrow-alt"></span>
           <span className="bx bx-right-arrow-alt"></span>
-          <input type="text" className="w-80 p-1 rounded-lg bg-gray-100" />
+          <input type="text" className="w-40 p-1 rounded-lg bg-gray-100" />
         </div>
         <ul className="flex gap-2">
           {[

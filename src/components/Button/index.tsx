@@ -6,9 +6,8 @@ const Button = (props: ButtonProps) => {
   //
   const [loading, setLoading] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [width, setWidth] = useState<Number | null>(null);
   const ref = useRef<HTMLButtonElement>(null);
-  const { id, children, mode, handleClick, disabled } = props;
+  const { id, children, mode, handleClick, disabled, width, height } = props;
   const [modeCurrent, setModeCurrent] = useState(mode);
   const generateClassMode = (): string => {
     switch (modeCurrent) {
@@ -26,10 +25,10 @@ const Button = (props: ButtonProps) => {
         return "border-none text-blue-500";
     }
   };
-  const handleClickOverride = () => {
+  const handleClickOverride = async () => {
     setModeCurrent("disabled");
     setLoading(!loading);
-    handleClick && handleClick();
+    handleClick && (await handleClick());
     setLoading(false);
     setModeCurrent(mode);
   };
@@ -46,9 +45,10 @@ const Button = (props: ButtonProps) => {
       id={id}
       className={`py-2 rounded-sm transition whitespace-nowrap rounded-lg px-5 font-semibold ${generateClassMode()} ${
         !mode ? "text-button" : ""
-      }`}
+      } flex items-center justify-center`}
       style={{
         width: width ? `${width}px` : "auto",
+        height: height ? `${height}px` : "auto",
       }}
       disabled={disabled}
     >

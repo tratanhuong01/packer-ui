@@ -1,11 +1,14 @@
 import { useState } from "react";
 import TableProps from "./type";
+import "./index.scss";
 
 const Table = ({ thead, tbody }: TableProps) => {
   //
   const [list, setList] = useState<any[]>(tbody);
   const [selected, setSelected] = useState<any[]>([]);
   const checked = (child?: any) => {
+    if (selected.length === 0) return;
+
     if (!child) return selected.length === list.length;
     const index = selected.findIndex((item) => item.id === child.id);
     return index !== -1;
@@ -40,9 +43,11 @@ const Table = ({ thead, tbody }: TableProps) => {
               {item}
             </th>
           ))}
+          <th>Edit</th>
+          <th>Delete</th>
         </tr>
       </thead>
-      {tbody.length > 0 && (
+      {list.length > 0 ? (
         <tbody>
           {list.map((item) => (
             <tr>
@@ -78,6 +83,19 @@ const Table = ({ thead, tbody }: TableProps) => {
               </td>
             </tr>
           ))}
+        </tbody>
+      ) : (
+        <tbody>
+          <tr className="hover:bg-white">
+            <td colSpan={thead.length + 3} className="hover:bg-white">
+              <img
+                src="https://img.freepik.com/premium-vector/male-employee-is-looking-file-through-magnifying-glass-document_639720-48.jpg"
+                alt=""
+                className="w-60 h-60 mt-10 object-cover mx-auto"
+              />
+              <p className="text-center text-sm text-gray-500">No result.</p>
+            </td>
+          </tr>
         </tbody>
       )}
     </table>
