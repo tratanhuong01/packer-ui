@@ -10,5 +10,5 @@ export type ItemGenerateChild = {
   id: number;
   name: string;
   type: "component" | "app" | "doc";
-  component: ReactNode;
+  component: ReactNode | any;
 };

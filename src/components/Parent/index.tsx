@@ -1,8 +1,14 @@
 import ParentProps from "./type";
 
-const Parent = (props: ParentProps) => {
+const Parent = ({
+  justify,
+  items,
+  gap,
+  className,
+  children,
+  handleClick,
+}: ParentProps) => {
   //
-  const { justify, items, gap, className, children } = props;
   const generateJustify = () => {
     switch (justify) {
       case "space-between":
@@ -29,6 +35,7 @@ const Parent = (props: ParentProps) => {
   //
   return (
     <div
+      onClick={() => handleClick && handleClick()}
       className={`flex ${className || ""} ${classNameChildren || ""}`}
       style={{ gap: `${gap || 0}px` }}
     >

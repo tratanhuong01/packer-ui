@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Wrapper from "../pages/Wrapper";
+import Admin from "../modules/Admin";
 
 const Router = () => {
   return (
@@ -7,6 +8,9 @@ const Router = () => {
       <Routes>
         <Route path="/">
           <Route key={Math.random()} path={"/"} element={<Wrapper />} />
+          <Route key={Math.random()} path={"/admin"} element={<Admin />} />
+          <Route key={Math.random()} path={"/admin/*"} element={<Admin />} />
+
           <Route
             path="*"
             element={

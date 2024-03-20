@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 
 type TooltipProps = {
   children: ReactNode;
-  title: string;
+  title: string | ReactNode;
   position: "top" | "left" | "right" | "bottom";
   handleClick?: Function;
 };

@@ -2,12 +2,22 @@ import { useEffect, useRef, useState } from "react";
 import "./index.scss";
 import ButtonProps from "./type";
 
-const Button = (props: ButtonProps) => {
+const Button = ({
+  type,
+  id,
+  children,
+  mode,
+  handleClick,
+  disabled,
+  width,
+  className,
+  loading,
+  height,
+}: ButtonProps) => {
   //
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(loading);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const ref = useRef<HTMLButtonElement>(null);
-  const { id, children, mode, handleClick, disabled, width, height } = props;
   const [modeCurrent, setModeCurrent] = useState(mode);
   const generateClassMode = (): string => {
     switch (modeCurrent) {
@@ -18,18 +28,21 @@ const Button = (props: ButtonProps) => {
       case "outlined":
         return "border border-solid text-blue-500 border-blue-500 bg-white hover:bg-blue-600 border border-solid border-blue-500 hover:text-white";
       case "contained":
-        return disabled
-          ? "border border-solid border-gray-300 bg-gray-600 hover:bg-gray-500 text-white cursor-not-allowed"
-          : "border border-solid border-gray-300 bg-blue-600 hover:bg-blue-500 text-white";
+        return "border border-solid border-gray-300 bg-blue-600 hover:bg-blue-500 text-white";
       default:
         return "border-none text-blue-500";
     }
   };
   const handleClickOverride = async () => {
     setModeCurrent("disabled");
-    setLoading(!loading);
-    handleClick && (await handleClick());
-    setLoading(false);
+    setIsLoading(!isLoading);
+    if (typeof handleClick === "string") {
+      // eslint-disable-next-line no-new-func
+      const func = new Function(handleClick);
+      await func();
+    }
+    typeof handleClick === "function" && (await handleClick());
+    setIsLoading(false);
     setModeCurrent(mode);
   };
   useEffect(() => {
@@ -40,19 +53,21 @@ const Button = (props: ButtonProps) => {
   //
   return (
     <button
+      type={type || "button"}
       ref={ref}
       onClick={handleClickOverride}
       id={id}
       className={`py-2 rounded-sm transition whitespace-nowrap rounded-lg px-5 font-semibold ${generateClassMode()} ${
         !mode ? "text-button" : ""
-      } flex items-center justify-center`}
+      } disabled:bg-gray-600 disabled:hover:bg-gray-500 disabled:text-white disabled:cursor-not-allowed flex items-center justify-center ${className}`}
       style={{
-        width: width ? `${width}px` : "auto",
+        width:
+          typeof width === "string" ? width : width ? `${width}px` : "auto",
         height: height ? `${height}px` : "auto",
       }}
       disabled={disabled}
     >
-      {loading && mode !== "text" ? (
+      {isLoading && mode !== "text" ? (
         <i className="bx bx-loader-circle loader"></i>
       ) : (
         children

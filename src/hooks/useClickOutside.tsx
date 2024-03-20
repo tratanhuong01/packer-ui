@@ -2,25 +2,38 @@ import { useRef, useEffect, MouseEvent } from "react";
 
 interface ClickOutsideProps {
   handleClick: (boolean: Boolean | null) => void;
+  status: boolean;
 }
 
-const useClickOutside = ({ handleClick }: ClickOutsideProps) => {
-  const ref = useRef<HTMLDivElement | null>(null);
-
+const useClickOutside = ({ handleClick, status }: ClickOutsideProps) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const refPop = useRef<HTMLDivElement>(null);
+  const handleClickCustom = () => {
+    handleClick(false);
+  };
   const clickOutside: any = (event: MouseEvent) => {
-    handleClick(ref.current && !ref.current.contains(event.target as Node));
+    const outside = ref.current && !ref.current.contains(event.target as Node);
+    if (outside) {
+      ref.current?.removeEventListener("click", handleClickCustom);
+      document.removeEventListener("click", clickOutside);
+      handleClick(outside);
+      return;
+    }
   };
 
   useEffect(() => {
-    document.addEventListener("click", clickOutside);
-
+    if (status) {
+      document.addEventListener("click", clickOutside);
+    } else {
+      ref.current?.addEventListener("click", handleClickCustom);
+    }
     return () => {
       document.removeEventListener("click", clickOutside);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [handleClick]);
+  }, [status, ref.current]);
 
-  return ref;
+  return { ref, refPop };
 };
 
 export default useClickOutside;

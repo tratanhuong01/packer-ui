@@ -6,9 +6,14 @@ import ModalSearch from "../../../../modals/ModalSearch";
 import Input from "../../../../components/Input";
 import Box from "../../../../components/Box";
 import GenerateRoute from "../../../../routers/GenerateRoute";
+import { ItemGenerateChild } from "../../../../routers/GenerateRoute/type";
 //
 
-const LeftNavigation = () => {
+const LeftNavigation = ({
+  componentList,
+}: {
+  componentList: ItemGenerateChild[];
+}) => {
   //
   const {
     app: { menuActive },
@@ -84,6 +89,15 @@ const LeftNavigation = () => {
             parent={item.name}
           />
         ))}
+        <ItemLeftNavigation
+          key={Math.random()}
+          navigation={{
+            id: Math.random(),
+            name: "Components",
+            items: componentList,
+          }}
+          parent={"Components"}
+        />
       </div>
     </div>
   );

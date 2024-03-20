@@ -1,20 +1,10 @@
-import { Dispatch, ReactNode, createContext, useReducer } from "react";
+import { createContext, useReducer } from "react";
 import AppReducer from "./AppReducer";
-import { ActionType, Payload, StateType } from "./types";
+import { ActionType, ContextType, ProviderType, StateType } from "./types";
 import * as actionList from "./Actions";
 
 const actions = { ...actionList };
 
-type ProviderType = {
-  children?: ReactNode;
-};
-type ContextType = {
-  app: StateType;
-  actions: {
-    updateData: (payload: Payload) => ActionType;
-  };
-  dispatch: Dispatch<ActionType>;
-};
 const initialState: StateType = {
   menuActive: false,
 };

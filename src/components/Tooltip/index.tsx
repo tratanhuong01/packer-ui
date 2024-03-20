@@ -71,7 +71,7 @@ const Tooltip = (props: TooltipProps) => {
         clearTimeout(timeOut);
       }}
       onClick={() => handleClick && handleClick()}
-      className="relative"
+      className="relative inline-block"
     >
       <div>{children}</div>
       <div ref={child} className={`opacity-animation absolute ${className}`}>

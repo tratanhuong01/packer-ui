@@ -1,4 +1,4 @@
-import { ReactNode, useEffect } from "react";
+import { ReactNode } from "react";
 import { createPortal } from "react-dom";
 import "./index.scss";
 import Overlay from "../Overlay";
@@ -8,43 +8,54 @@ import Box from "../Box";
 import Button from "../Button";
 import useClickOutside from "../../hooks/useClickOutside";
 
-const Portal = ({ children }: { children?: ReactNode }) => {
+const Portal = ({
+  children,
+  childrenModal,
+}: {
+  children?: ReactNode;
+  childrenModal?: string;
+}) => {
   //
-  const modalRoot = document.getElementById("modal-root");
-  const el = document.createElement("div");
-  useEffect(() => {
-    modalRoot?.appendChild(el);
-    document.body.style.overflow = "hidden";
-    return () => {
-      modalRoot?.removeChild(el);
-      document.body.style.overflow = "";
-    };
-  }, [el, modalRoot]);
-  //
-  return createPortal(children, el);
+  const modalRoot = document.getElementById(
+    childrenModal ? "children-modal-root" : "modal-root"
+  );
+  return createPortal(children, modalRoot || document.body);
 };
 
 const Modal = (props: ModalProps) => {
   //
-  const { children, width, headerTitle, closeModal, footerButton } = props;
+  const {
+    children,
+    width,
+    headerTitle,
+    closeModal,
+    footerButton,
+    footerButtonRender,
+    childrenModal,
+  } = props;
   const refContent = useClickOutside({
     handleClick: (bool) => {
       bool && closeModal && closeModal();
     },
+    status: false,
   });
   //
   return (
-    <Portal>
-      <Overlay isPosition="fixed" />
+    <Portal childrenModal={childrenModal}>
+      <Overlay isPosition={childrenModal ? "absolute" : "fixed"} />
       <Parent
         justify="center"
         items="center"
-        className="w-full h-screen fixed top-0 left-0 zoomIn"
+        className={`w-full ${
+          childrenModal
+            ? "absolute right-0 bottom-0"
+            : "fixed h-screen zoomIn z-30"
+        } top-0 left-0 `}
       >
         <div
-          ref={refContent}
+          ref={refContent.ref}
           className="w-full bg-white rounded-sm"
-          style={{ width: `${width || 500}px` }}
+          style={{ width: `${width || 600}px` }}
         >
           {headerTitle && (
             <Parent justify="center" items="center">
@@ -72,22 +83,25 @@ const Modal = (props: ModalProps) => {
             </Parent>
           )}
           <div className="p-3">{children}</div>
-          {footerButton && footerButton.length > 0 && (
-            <div className="p-3 w-full border-t border-solid border-gray-300 flex justify-end">
-              <div>
-                {footerButton &&
-                  footerButton.map((item) => (
-                    <Button
-                      key={item.id}
-                      handleClick={item.handle}
-                      mode={item.type === "close" ? "gray" : "primary"}
-                    >
-                      {item.name}
-                    </Button>
-                  ))}
-              </div>
-            </div>
-          )}
+          {footerButtonRender
+            ? footerButtonRender
+            : footerButton &&
+              footerButton.length > 0 && (
+                <div className="p-3 w-full border-t border-solid border-gray-300 flex justify-end">
+                  <div>
+                    {footerButton &&
+                      footerButton.map((item) => (
+                        <Button
+                          key={item.id}
+                          handleClick={item.handle}
+                          mode={item.type === "close" ? "gray" : "primary"}
+                        >
+                          {item.name}
+                        </Button>
+                      ))}
+                  </div>
+                </div>
+              )}
         </div>
       </Parent>
     </Portal>

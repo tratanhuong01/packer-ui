@@ -89,7 +89,7 @@ const StartSearch = () => {
   //
   return (
     <Fragment>
-      <div className="absolute top-0 left-0 cursor-pointer z-30 bg-white w-full shadow-sm">
+      <div className="absolute top-0 left-0 cursor-pointer bg-white w-full shadow-sm">
         <Popover component={<PopupVersionChat />}>
           <div className="flex items-center gap-0.5 p-4">
             <span className="font-bold text-black">ChatGPT</span>

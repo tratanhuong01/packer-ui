@@ -5,14 +5,6 @@ import useClickOutside from "../../hooks/useClickOutside";
 
 const Input = (props: InputProps) => {
   //
-  const ref = useRef<HTMLInputElement>(null);
-  const refContainer = useClickOutside({
-    handleClick: (bool: Boolean | null) => {
-      bool && setIsFocus(false);
-      !bool && handleClick && handleClick();
-    },
-  });
-  const mode = props.mode || "normal";
   const {
     type,
     placeholder,
@@ -28,11 +20,24 @@ const Input = (props: InputProps) => {
   const [data, setData] = useState({
     showPassword: false,
   });
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState(props.value || "");
   const [isFocus, setIsFocus] = useState(false);
+  const ref = useRef<HTMLInputElement>(null);
+  const refContainer = useClickOutside({
+    handleClick: (bool: Boolean | null) => {
+      bool && setIsFocus(false);
+      !bool && handleClick && handleClick();
+    },
+    status: isFocus,
+  });
+  const mode = props.mode || "normal";
+
   //
   return (
-    <div ref={refContainer} className={`input__container ${className || ""}`}>
+    <div
+      ref={refContainer.ref}
+      className={`input__container inline-block ${className || ""}`}
+    >
       <div
         onClick={() => setIsFocus(true)}
         className="relative"
@@ -57,7 +62,7 @@ const Input = (props: InputProps) => {
           placeholder={mode === "normal" ? placeholder : ""}
           className={`w-full h-full bg-transparent ${
             mode === "normal" || mode === "outlined"
-              ? "border-solid border-gray-200 border focus:border-blue-500"
+              ? "border-solid border-gray-300 border focus:border-blue-500"
               : mode === "standard"
               ? "border-b-8 border-transparent border-b-solid border-b-gray-400"
               : "border-none"
@@ -77,8 +82,10 @@ const Input = (props: InputProps) => {
             className={`absolute transform-y-center inline-block ${
               mode !== "standard" ? "left-2" : "left-0"
             } transition ${
-              isFocus || value.length > 0
-                ? "-top-0.5 text-sm bg-white py-0.5 px-1 text-blue-500 font-normal"
+              isFocus || value
+                ? `-top-0.5 text-sm bg-white ${
+                    isFocus ? "text-blue-500" : ""
+                  } py-0.5 px-1 font-normal `
                 : "text-gray-500 opacity-80 pl-0.5 top-1/2"
             }`}
           >

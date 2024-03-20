@@ -1,17 +1,31 @@
 import { ChangeEvent, useState } from "react";
 import useClickOutside from "../../hooks/useClickOutside";
 
-const AutoComplete = (props: {
+const AutoComplete = ({
+  options,
+  itemHandle,
+  nameSearch,
+  placeholder,
+  defaultValue,
+}: {
   options: any[];
   itemHandle?: (item: any) => void;
-  nameSearch?: null | string;
+  nameSearch?: string;
+  placeholder?: string;
+  defaultValue?: any;
 }) => {
   //
   const [isFocus, setIsFocus] = useState<Boolean | null>();
   const [showPopup, setShowPopup] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [currentSelect, setCurrentSelect] = useState("");
-  const [value, setValue] = useState("");
+  const [currentSelect, setCurrentSelect] = useState<any>(defaultValue);
+  const [value, setValue] = useState(
+    defaultValue
+      ? typeof defaultValue === "object"
+        ? defaultValue[nameSearch || ""]
+        : defaultValue
+      : ""
+  );
   const handleClick = (outside: Boolean | null) => {
     if (currentSelect) {
       setIsFocus(true);
@@ -24,8 +38,7 @@ const AutoComplete = (props: {
       setIsFocus(false);
     }
   };
-  const { options, itemHandle, nameSearch } = props;
-  const ref = useClickOutside({ handleClick });
+  const { ref, refPop } = useClickOutside({ handleClick, status: showPopup });
   const data = (() => {
     return !value
       ? options
@@ -68,7 +81,7 @@ const AutoComplete = (props: {
         } ${isFocus ? "text-blue-500" : "text-gray-500"}`}
         style={{ transition: "0.1s all" }}
       >
-        Name
+        {placeholder || "Name"}
       </span>
       <input
         type="text"
@@ -93,39 +106,42 @@ const AutoComplete = (props: {
         className={`bx bxs-chevron-${!showPopup ? "down" : "up"} text-gray-600`}
       ></span>
       {showPopup && (
-        <ul
-          className="w-full border-solid border-gray-200 border-l border-r
-         absolute top-full left-0 mt-1 bg-white max-h-60 overflow-y-scroll"
+        <div
+          ref={refPop}
+          className="w-full border-solid border-gray-200 border-l border-r z-auto-complete
+        absolute top-full left-0 mt-1 bg-white max-h-60 overflow-y-auto"
         >
-          {data.map((item) => (
-            <li
-              onClick={() => {
-                setCurrentSelect(item);
-                setValue(
-                  typeof item === "object" && nameSearch
-                    ? item[nameSearch]
-                    : item
-                );
-                setShowPopup(false);
-                setIsFocus(true);
-                itemHandle && itemHandle(item);
-              }}
-              key={typeof item === "object" ? item.id : item}
-              className={`p-2 border-b border-solid border-gray-200 ${
-                currentSelect === item ? "" : "hover:"
-              }bg-gray-100`}
-            >
-              {typeof item === "object" ? item[nameSearch || "name"] : item}
-            </li>
-          ))}
-          {data.length === 0 && (
-            <li
-              className={`p-2 border-b border-solid border-gray-30 bg-gray-100`}
-            >
-              No options
-            </li>
-          )}
-        </ul>
+          <ul className="w-full">
+            {data.map((item) => (
+              <li
+                onClick={() => {
+                  setCurrentSelect(item);
+                  setValue(
+                    typeof item === "object" && nameSearch
+                      ? item[nameSearch]
+                      : item
+                  );
+                  setShowPopup(false);
+                  setIsFocus(true);
+                  itemHandle && itemHandle(item);
+                }}
+                key={typeof item === "object" ? item.id : item}
+                className={`p-2 border-b border-solid border-gray-200 ${
+                  currentSelect === item ? "" : "hover:"
+                }bg-gray-100`}
+              >
+                {typeof item === "object" ? item[nameSearch || "name"] : item}
+              </li>
+            ))}
+            {data.length === 0 && (
+              <li
+                className={`p-2 border-b border-solid border-gray-30 bg-gray-100`}
+              >
+                No options
+              </li>
+            )}
+          </ul>
+        </div>
       )}
     </div>
   );

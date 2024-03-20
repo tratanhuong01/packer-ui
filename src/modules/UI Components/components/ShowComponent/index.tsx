@@ -19,18 +19,10 @@ const ShowComponent = ({
     {
       icon: "bx bx-copy",
       handle: async () => {
-        const textArea = document.createElement("textarea");
-        textArea.value = (!collapse ? code?.collapse : code?.expand) || "";
-        document.body.appendChild(textArea);
-        textArea.focus();
-        textArea.select();
-        try {
-          document.execCommand("copy");
-          alert("Copy successfully");
-        } catch (err) {
-          console.error("Unable to copy to clipboard", err);
-        }
-        document.body.removeChild(textArea);
+        navigator.clipboard.writeText(
+          (!collapse ? code?.collapse : code?.expand) || ""
+        );
+        alert("Copy successfully");
       },
     },
     { icon: "bx bx-fullscreen", handle: () => "" },
@@ -68,7 +60,10 @@ const ShowComponent = ({
         </Parent>
       </Parent>
       {code && (
-        <div className="border-2 border-solid border-gray-200 focus-within:border-blue-500 text-xs md:text-base">
+        <div
+          className="border-2 border-solid border-gray-200 focus-within:border-blue-500 text-xs md:text-base 
+        code rounded-xl overflow-hidden"
+        >
           {!collapse ? (
             <ReactSyntaxHighlighter
               language="jsx"

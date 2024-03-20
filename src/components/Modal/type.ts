@@ -12,6 +12,9 @@ type ModalProps = {
     name: string;
     type: "other" | "confirm" | "close";
   }[];
+  footerButtonRender?: ReactNode;
+  childrenModal?: string;
+  hidden?: boolean;
 };
 
 export default ModalProps;

@@ -1,3 +1,5 @@
+import { ReactNode, Dispatch } from "react";
+
 type StateType = {
   menuActive: boolean;
 };
@@ -13,4 +15,22 @@ type ActionType = {
   payload: Payload;
 };
 
-export type { StateType, ActionType, StateKey, Payload };
+type ProviderType = {
+  children?: ReactNode;
+};
+type ContextType = {
+  app: StateType;
+  actions: {
+    updateData: (payload: Payload) => ActionType;
+  };
+  dispatch: Dispatch<ActionType>;
+};
+
+export type {
+  StateType,
+  ActionType,
+  StateKey,
+  Payload,
+  ContextType,
+  ProviderType,
+};

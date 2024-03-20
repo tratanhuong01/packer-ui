@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { Style } from "util";
 
 type ParentProps = {
   children?: ReactNode;
@@ -6,6 +7,8 @@ type ParentProps = {
   items?: undefined | "" | "center";
   gap?: Number;
   className?: string;
+  handleClick?: Function;
+  style?: Style;
 };
 
 export default ParentProps;

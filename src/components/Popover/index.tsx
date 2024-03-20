@@ -5,6 +5,7 @@ import useClickOutside from "../../hooks/useClickOutside";
 
 const Popover = (props: PopoverProps) => {
   //
+  const [show, setShow] = useState(false);
   const { component, children } = props;
   const handleClick = (outside: Boolean | null) => {
     if (outside) {
@@ -13,15 +14,17 @@ const Popover = (props: PopoverProps) => {
       setShow(!show);
     }
   };
-  const ref = useClickOutside({ handleClick });
-  const [show, setShow] = useState(false);
+  const { ref, refPop } = useClickOutside({ handleClick, status: show });
   //
   return (
     <div className="relative">
       <div ref={ref} className="relative w-auto inline-block">
         {children}
         {show && (
-          <div className="absolute top-full left-0 mt-2 w-auto z-10 bg-white">
+          <div
+            ref={refPop}
+            className="absolute top-full left-0 mt-2 w-auto z-10 bg-white"
+          >
             {component}
           </div>
         )}

@@ -14,7 +14,7 @@ const TitleDescription = ({
           ? "text-4xl pb-2 mt-6 font-bold"
           : type === "normal"
           ? "text-2xl pb-1 mt-6 font-bold"
-          : "pb-0.5"
+          : "pb-0.5 pb-4"
       }`}
     >
       {children}

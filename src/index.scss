@@ -94,3 +94,15 @@ div {
     background-color: transparent;
   }
 }
+
+.z-modal {
+  z-index: 99999;
+}
+
+.z-popover {
+  z-index: 88888;
+}
+
+.z-auto-complete {
+  z-index: 77777;
+}

@@ -5,7 +5,7 @@ import ListComponent from "../../../modules/UI Components/pages/ListComponent";
 import Overview from "../../../modules/UI Components/pages/Overview";
 import Usage from "../../../modules/UI Components/pages/Usage";
 import { ItemGenerateChild } from "../type";
-
+import TicAndToe from "../../../modules/TicAndToe/index";
 //
 const chatGPT: ItemGenerateChild = {
   id: Math.random(),
@@ -35,7 +35,7 @@ const ticAndToe: ItemGenerateChild = {
   id: Math.random(),
   name: "Tic and toe",
   type: "app",
-  component: <p>Tic and toe</p>,
+  component: <TicAndToe />,
 };
 const uiCode: ItemGenerateChild = {
   id: Math.random(),
