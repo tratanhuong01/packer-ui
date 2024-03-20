@@ -82,7 +82,7 @@ const MainAdmin = () => {
           mode="primary"
           handleClick={async () => {
             if (stepCurrent + 1 === steps.length) {
-              await fetch("http://192.168.30.163:8000/components", {
+              await fetch("http://192.168.40.118:8000/components", {
                 method: "POST",
                 body: JSON.stringify({
                   id: Math.random(),

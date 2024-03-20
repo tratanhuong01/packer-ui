@@ -58,7 +58,7 @@ const Wrapper = ({
   }, [location.pathname, componentList]);
   useEffect(() => {
     const fetchData = async () => {
-      const result = await fetch("http://192.168.30.163:8000/components").then(
+      const result = await fetch("http://192.168.40.118:8000/components").then(
         (res) => res.json()
       );
       setComponentList(result);
