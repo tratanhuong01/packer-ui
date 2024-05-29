@@ -144,7 +144,7 @@ const ContentComponent = () => {
         <AutoComplete
           options={options}
           placeholder="Type render"
-          itemHandle={(item) => {
+          itemHandle={(item: any) => {
             setTypeRender(item);
           }}
           defaultValue={typeRender}
@@ -159,7 +159,6 @@ const ContentComponent = () => {
                 id,
                 content: "",
                 type: typeRender,
-                renderType: "",
                 component: {
                   code: {
                     expand: "",

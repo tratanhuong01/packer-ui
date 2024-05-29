@@ -53,7 +53,7 @@ const MainAdmin = () => {
       id: Math.random(),
       name: "Create props",
       index: 0,
-      render: <FeatureComponent />,
+      render: <FeatureComponent selected={[]} />,
     },
     {
       id: Math.random(),
