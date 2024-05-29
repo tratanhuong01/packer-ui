@@ -1,6 +1,7 @@
 type StepByStepProps = {
   steps: StepProps[];
   stepCurrent: number;
+  setStepCurrent?: (val: number) => void;
 };
 
 type StepProps = {

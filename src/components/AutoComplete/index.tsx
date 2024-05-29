@@ -1,21 +1,19 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, ReactNode, useEffect, useState } from "react";
 import useClickOutside from "../../hooks/useClickOutside";
+import AutoCompleteProps from "./type";
 
-const AutoComplete = ({
+const AutoComplete = <T,>({
   options,
   itemHandle,
   nameSearch,
   placeholder,
   defaultValue,
-}: {
-  options: any[];
-  itemHandle?: (item: any) => void;
-  nameSearch?: string;
-  placeholder?: string;
-  defaultValue?: any;
-}) => {
+  disabled,
+  customValue,
+  customValueRender,
+}: AutoCompleteProps<T>) => {
   //
-  const [isFocus, setIsFocus] = useState<Boolean | null>();
+  const [isFocus, setIsFocus] = useState<Boolean | null>(false);
   const [showPopup, setShowPopup] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [currentSelect, setCurrentSelect] = useState<any>(defaultValue);
@@ -26,7 +24,19 @@ const AutoComplete = ({
         : defaultValue
       : ""
   );
+  useEffect(() => {
+    setCurrentSelect(defaultValue);
+    setValue(
+      defaultValue
+        ? typeof defaultValue === "object"
+          ? defaultValue[nameSearch || ""]
+          : defaultValue
+        : ""
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [defaultValue]);
   const handleClick = (outside: Boolean | null) => {
+    if (disabled) return;
     if (currentSelect) {
       setIsFocus(true);
     } else {
@@ -42,50 +52,57 @@ const AutoComplete = ({
   const data = (() => {
     return !value
       ? options
-      : options.filter((item) => {
+      : options.filter((item: T) => {
           let isHaveColumn = false;
           if (
             options.length > 0 &&
             nameSearch &&
             typeof options[0] === "object"
           ) {
-            for (let key of Object.keys(options[0])) {
+            for (let key of Object.keys(options[0] as Object)) {
               if (key === nameSearch) {
                 isHaveColumn = true;
                 break;
               }
             }
-            if (!isHaveColumn) return options;
-            return (
-              item[nameSearch].toLowerCase().indexOf(value.toLowerCase()) !== -1
-            );
           }
-
-          return item.toLowerCase().indexOf(value.toLowerCase()) !== -1;
+          if (!isHaveColumn) return options;
+          return typeof item === "string"
+            ? item.toLowerCase().indexOf(value.toLowerCase()) !== -1
+            : String(
+                nameSearch
+                  ? customValue
+                    ? customValue(item[nameSearch])
+                    : item[nameSearch]
+                  : ""
+              )
+                .toLowerCase()
+                .indexOf(value.toLowerCase()) !== -1;
         });
   })();
+  const CustomValueRender = customValueRender;
   //
   return (
     <div
       ref={ref}
-      className={`w-72 p-3 border-solid ${
-        isFocus ? "border-2 border-blue-500" : "border border-gray-200"
-      } cursor-pointer relative
-      rounded-sm flex items-center justify-between`}
+      className={`w-full p-3 my-2 border-solid ${
+        isFocus ? "border border-primary" : "border border-gray-200"
+      }  relative rounded-md flex items-center justify-between ${
+        disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"
+      }`}
     >
       <span
-        className={`absolute transform-y-center ${
+        className={`absolute -transform-y-center ${
           isFocus || currentSelect
-            ? "bg-white p-1 top-0 px-2 left-3 text-sm"
+            ? "bg-white p-0.5 top-0 px-2 left-3 text-sm"
             : "text-gray-600 top-1/2 left-3 block w-full"
-        } ${isFocus ? "text-blue-500" : "text-gray-500"}`}
+        } ${isFocus ? "text-primary" : "text-gray-500"}`.trim()}
         style={{ transition: "0.1s all" }}
       >
         {placeholder || "Name"}
       </span>
       <input
         type="text"
-        onClick={() => setShowPopup(false)}
         value={value}
         onChange={(event: ChangeEvent<HTMLInputElement>) =>
           setValue(event.target.value)
@@ -99,7 +116,7 @@ const AutoComplete = ({
             setValue("");
             setShowPopup(false);
           }}
-          className="bx bx-x absolute z-10 top-1/2 transform-y-center right-8 text-xl text-gray-500"
+          className="bx bx-x absolute z-10 top-1/2 w-auto -transform-y-center right-8 text-xl text-gray-500"
         ></span>
       )}
       <span
@@ -108,16 +125,22 @@ const AutoComplete = ({
       {showPopup && (
         <div
           ref={refPop}
-          className="w-full border-solid border-gray-200 border-l border-r z-auto-complete
-        absolute top-full left-0 mt-1 bg-white max-h-60 overflow-y-auto"
+          className="w-full border-solid border-gray-200 border-l border-r z-auto-complete shadow-lg
+        absolute top-full left-0 mt-1 bg-white max-h-60 overflow-y-auto z-10 rounded-md"
         >
           <ul className="w-full">
-            {data.map((item) => (
+            {data.map((item: T) => (
               <li
                 onClick={() => {
                   setCurrentSelect(item);
                   setValue(
-                    typeof item === "object" && nameSearch
+                    customValue
+                      ? customValue(
+                          item && typeof item === "object" && nameSearch
+                            ? item[nameSearch]
+                            : item
+                        )
+                      : item && typeof item === "object" && nameSearch
                       ? item[nameSearch]
                       : item
                   );
@@ -125,12 +148,33 @@ const AutoComplete = ({
                   setIsFocus(true);
                   itemHandle && itemHandle(item);
                 }}
-                key={typeof item === "object" ? item.id : item}
+                key={Math.random()}
                 className={`p-2 border-b border-solid border-gray-200 ${
-                  currentSelect === item ? "" : "hover:"
-                }bg-gray-100`}
+                  currentSelect === item
+                    ? "bg-primary text-white"
+                    : "hover:bg-primary hover:text-white"
+                }`}
               >
-                {typeof item === "object" ? item[nameSearch || "name"] : item}
+                {CustomValueRender ? (
+                  <CustomValueRender
+                    value={
+                      (item && typeof item === "object" && nameSearch
+                        ? nameSearch && item[nameSearch]
+                        : typeof item === "string"
+                        ? item.toString()
+                        : "") as string
+                    }
+                    object={item}
+                  />
+                ) : (
+                  ((item && typeof item === "object" ? (
+                    nameSearch && item[nameSearch]
+                  ) : typeof item === "string" ? (
+                    item
+                  ) : (
+                    <></>
+                  )) as ReactNode)
+                )}
               </li>
             ))}
             {data.length === 0 && (

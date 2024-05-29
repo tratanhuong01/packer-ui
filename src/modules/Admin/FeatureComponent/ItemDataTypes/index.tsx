@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import Button from "../../../../components/Button";
 import Modal from "../../../../components/Modal";
 import Input from "../../../../components/Input";
-import ModalProps from "../../../../components/Modal/type";
+import { ModalProps } from "../../../../components/Modal/type";
 import { PropItem } from "../../../../contexts/AdminContext/types";
 import { AdminContext } from "../../../../contexts/AdminContext/AdminContext";
 
@@ -18,13 +18,17 @@ const ItemDataTypes = ({
     actions: { updateProps },
     dispatch,
   } = useContext(AdminContext);
-  const [type, setType] = useState("");
-  const [fields, setFields] = useState<{ id: number; value: string }[]>([
-    {
-      id: Math.random(),
-      value: "",
-    },
-  ]);
+  const [type, setType] = useState(prop.dataType.type);
+  const [fields, setFields] = useState<{ id: number; value: string }[]>(
+    prop.isAdded
+      ? [
+          {
+            id: Math.random(),
+            value: "",
+          },
+        ]
+      : prop.dataType.detail
+  );
   //
   return (
     <Modal
@@ -61,14 +65,12 @@ const ItemDataTypes = ({
           <span
             onClick={() => {
               setType(item);
-              if (item === "object" || item === "array") {
-              }
             }}
-            className={`px-2 py-1 border border-blue-500 border-solid cursor-pointer 
+            className={`px-2 py-1 border border-primary border-solid cursor-pointer 
                   ${
                     type === item
-                      ? "bg-blue-500 text-white"
-                      : "hover:bg-blue-500 hover:text-white"
+                      ? "bg-primary text-white"
+                      : "hover:bg-primary hover:text-white"
                   } text-center`}
             key={item}
           >

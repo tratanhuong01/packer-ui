@@ -9,24 +9,26 @@ import GenerateRoute from "../routers/GenerateRoute";
 import { routeFull } from "../utils/utils";
 import NotFound from "../modules/UI Components/components/NotFound";
 import RenderComponent from "../modules/UI Components/components/RenderComponent";
+// import { getAllComponents } from "../modules/Admin/apis";
 
-const Wrapper = ({
-  children,
-  notFound,
-}: {
+type WrapperProps = {
   children?: ReactNode;
   notFound?: boolean;
-}) => {
+  hideContentRight?: boolean;
+};
+
+const Wrapper = ({ children, notFound, hideContentRight }: WrapperProps) => {
   //
   const {
     dispatch,
     actions: { updateData },
   } = useContext(AppContext);
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   const refContent = useRef<HTMLDivElement>(null);
   const [component, setComponent] = useState<any>();
   const location = useLocation();
   const navigate = useNavigate();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [componentList, setComponentList] = useState<any>();
   useEffect(() => {
     if (!refContent.current) return;
@@ -37,64 +39,66 @@ const Wrapper = ({
       return;
     }
     let checkIndex = -1;
-    const newData = [
-      ...GenerateRoute,
-      { id: Math.random(), name: "Components", items: componentList },
-    ];
-    newData.forEach((item: any) => {
+    // const newData = [
+    //   ...GenerateRoute,
+    //   { id: Math.random(), name: "Components", items: componentList },
+    // ];
+    GenerateRoute.forEach((item: any) => {
+      if (!Array.isArray(item.items)) return;
       const check = item.items.findIndex(
         (child: any) =>
           location.pathname === `${routeFull(item.name, child.name)}`
       );
       if (check !== -1) {
         checkIndex = check;
-        setComponent(item.items[check].component);
-
+        setComponent(item.items[check].contents || item.items[check].component);
         return;
       }
     });
     if (checkIndex === -1) setComponent(<NotFound />);
     //
   }, [location.pathname, componentList]);
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await fetch("http://192.168.40.118:8000/components").then(
-        (res) => res.json()
-      );
-      setComponentList(result);
-      setLoading(false);
-    };
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const result = await getAllComponents().then((res) => res.json());
+  //     setComponentList(result);
+  //     setLoading(false);
+  //   };
+  //   fetchData();
+  // }, []);
   //
   return (
-    <div className="h-screen w-full overflow-hidden flex flex-col">
+    <div className="w-full overflow-hidden flex flex-col h-screen">
       <Header />
-      <Parent gap={10} className="flex-1 overflow-hidden">
-        {loading ? (
+      <Parent
+        gap={10}
+        className="flex-1 relative h-full overflow-y-hidden flex flex-row"
+      >
+        {/* {loading ? (
           <div className="h-full w-full flex items-center justify-center">
             <i className="bx bx-loader-alt text-4xl animate-spin"></i>
           </div>
-        ) : (
-          <>
-            <LeftNavigation componentList={componentList} />
-            <div
-              ref={refContent}
-              className="flex-1 px-4 pt-2 overflow-y-scroll h-full relative"
-            >
+        ) : ( */}
+        <>
+          <LeftNavigation componentList={componentList} />
+          <div
+            ref={refContent}
+            className="flex-1 relative h-full flex flex-row"
+          >
+            <div className="flex-1 p-2 h-full overflow-y-scroll">
               {notFound ? (
                 children
               ) : component && component.length ? (
-                // <div className="w-2/3">
                 <RenderComponent data={component} />
               ) : (
-                // </div>
                 component
               )}
-              <div id="children-modal-root"></div>
             </div>
-          </>
-        )}
+            {!hideContentRight && <div className="w-80"></div>}
+            <div id="children-modal-root"></div>
+          </div>
+        </>
+        {/* )} */}
       </Parent>
     </div>
   );

@@ -2,6 +2,7 @@ import { ReactNode, Dispatch } from "react";
 
 type StateType = {
   menuActive: boolean;
+  toasts: { id: number; severity: "" }[];
 };
 
 type StateKey = keyof StateType;

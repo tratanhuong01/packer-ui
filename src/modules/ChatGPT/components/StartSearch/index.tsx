@@ -23,23 +23,26 @@ const StartSearch = () => {
   };
   const fetchData = async (callback?: (str: string) => void) => {
     if (!current) return;
-    const result = await fetch(`http://192.168.30.106:8000/v2/chat-gpt`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(
-        current
-          ? current.messages
-              .map((item) => item.list[0])
-              .filter((item) => item.content.length > 0)
-              .map((item) => {
-                return {
-                  role: item.type === "user" ? "user" : "system",
-                  content: item.content[0].content,
-                };
-              })
-          : []
-      ),
-    }).then((res) => res.text());
+    const result = await fetch(
+      `${process.env.REACT_APP_BASE_URL}/v1/chat-gpt`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(
+          current
+            ? current.messages
+                .map((item) => item.list[0])
+                .filter((item) => item.content.length > 0)
+                .map((item) => {
+                  return {
+                    role: item.type === "user" ? "user" : "system",
+                    content: item.content[0].content,
+                  };
+                })
+            : []
+        ),
+      }
+    ).then((res) => res.text());
     if (callback) {
       callback(result);
       return;

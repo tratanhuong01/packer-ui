@@ -24,7 +24,7 @@ const RenderData = () => {
       index: 0,
     },
     {
-      class: `w-28 h-28 object-cover rounded-full border-2 border-solid border-blue-500 
+      class: `w-28 h-28 object-cover rounded-full border-2 border-solid border-primary 
       mx-auto`,
       index: 1,
     },
@@ -37,7 +37,7 @@ const RenderData = () => {
       index: 4,
     },
     {
-      class: `text-blue-500 font-bold my-1.5`,
+      class: `text-primary font-bold my-1.5`,
       index: 7,
     },
     {

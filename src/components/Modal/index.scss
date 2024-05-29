@@ -1,5 +1,9 @@
 .zoomIn {
-  animation: zoomIn 300ms ease-in;
+  animation: zoomIn 200ms ease-in;
+}
+
+.showIn {
+  animation: showIn 200ms ease-in;
 }
 
 @keyframes zoomIn {
@@ -8,6 +12,17 @@
   }
   to {
     transform: scale(1);
+  }
+}
+
+@keyframes showIn {
+  from {
+    opacity: 0;
+    visibility: hidden;
+  }
+  to {
+    opacity: 1;
+    visibility: visible;
   }
 }
 

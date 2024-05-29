@@ -4,6 +4,7 @@ import Input from "../../../components/Input";
 
 const Login = () => {
   //
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");

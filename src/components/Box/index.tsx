@@ -1,17 +1,16 @@
 import BoxProps from "./type";
 
-const Box = (props: BoxProps) => {
+const Box = ({
+  width,
+  height,
+  children,
+  border,
+  className,
+  rounded,
+  handleClick,
+  disabled,
+}: BoxProps) => {
   //
-  const {
-    width,
-    height,
-    children,
-    border,
-    className,
-    rounded,
-    handleClick,
-    disabled,
-  } = props;
   //
   return (
     <div

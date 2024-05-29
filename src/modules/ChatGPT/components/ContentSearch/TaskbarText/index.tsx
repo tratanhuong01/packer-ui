@@ -8,16 +8,9 @@ import {
 } from "../../../interfaces/Message";
 import { ChatGPTContext } from "../../../../../contexts/ChatGPTContext/ChatGPTContext";
 import { convertHTMLString } from "../../../utils";
+import { TaskbarTextProps } from "../type";
 
-const TaskbarText = ({
-  content,
-  messages,
-  fetchData,
-}: {
-  content: string;
-  fetchData: (callback?: (str: string) => void) => Promise<void>;
-  messages: MessageChildProps;
-}) => {
+const TaskbarText = ({ content, messages, fetchData }: TaskbarTextProps) => {
   //
   const {
     app: { current },

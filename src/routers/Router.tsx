@@ -1,16 +1,24 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Wrapper from "../pages/Wrapper";
 import Admin from "../modules/Admin";
+import ComponentPage from "../modules/Admin/ComponentPage";
+import PropPage from "../modules/Admin/PropPage";
+import ContentPage from "../modules/Admin/ContentPage";
+import Code from "../pages/LibraryManage";
 
 const Router = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/">
-          <Route key={Math.random()} path={"/"} element={<Wrapper />} />
-          <Route key={Math.random()} path={"/admin"} element={<Admin />} />
-          <Route key={Math.random()} path={"/admin/*"} element={<Admin />} />
-
+          <Route path={"/"} element={<Wrapper />} />
+          <Route path={"/admin/*"} element={<Admin />} />
+          <Route path={"/admin/component/"} element={<Admin />}>
+            <Route path="dashboard" element={<ComponentPage />} />
+            <Route path="add-props" element={<PropPage />} />
+            <Route path="add-content" element={<ContentPage />} />
+          </Route>
+          <Route key={Math.random()} path={"/code"} element={<Code />} />
           <Route
             path="*"
             element={

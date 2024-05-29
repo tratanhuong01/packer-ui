@@ -26,6 +26,7 @@ const ItemLeftNavigation = ({
         <div className="font-semibold">{navigation.name}</div>
       </div>
       {show &&
+        Array.isArray(navigation.items) &&
         navigation.items
           .sort((a, b) => (a.name > b.name ? 1 : a.name < b.name ? -1 : 0))
           .map((item) => (
@@ -35,7 +36,7 @@ const ItemLeftNavigation = ({
               className="flex gap-3 hover:bg-gray-100 cursor-pointer"
             >
               <div className="py-1 w-0.5 mx-2 bg-gray-200"></div>
-              <div className="py-1 hover:text-blue-500 text-gray-500 font-semibold">
+              <div className="py-1 hover:text-primary text-gray-500 font-semibold">
                 {item.name}
               </div>
             </div>

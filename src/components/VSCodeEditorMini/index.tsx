@@ -4,7 +4,7 @@ const VSCodeEditorMini = () => {
       <div className="flex justify-between items-center">
         <ul className="flex items-center gap-1">
           <li className="mr-3">
-            <i className="bx bxl-visual-studio text-xl text-blue-500"></i>
+            <i className="bx bxl-visual-studio text-xl text-primary"></i>
           </li>
           {[
             "File",

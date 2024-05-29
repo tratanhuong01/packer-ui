@@ -1,9 +1,9 @@
 import { useContext, useEffect } from "react";
-import Input from "../../../components/Input";
-import { AdminContentType } from "../../../contexts/AdminContext/types";
 import { AdminContext } from "../../../contexts/AdminContext/AdminContext";
+import { TextComponentProps } from "./type";
+import Input from "../../../components/Input";
 
-const TextComponent = ({ item }: { item: AdminContentType }) => {
+const TextComponent = ({ item }: TextComponentProps) => {
   //
   const {
     admin: { content },

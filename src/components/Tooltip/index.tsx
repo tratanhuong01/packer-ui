@@ -2,11 +2,16 @@ import { useRef, useState } from "react";
 import "./index.scss";
 import TooltipProps from "./type";
 
-const Tooltip = (props: TooltipProps) => {
+const Tooltip = ({
+  title,
+  children,
+  position,
+  handleClick,
+  disabled,
+}: TooltipProps) => {
   //
   const ref = useRef<HTMLDivElement>(null);
   const child = useRef<HTMLDivElement>(null);
-  const { title, children, position, handleClick } = props;
   const [show, setShow] = useState(false);
   let timeOut: ReturnType<typeof setTimeout>;
   const generateClass = (status?: boolean): string => {
@@ -70,12 +75,15 @@ const Tooltip = (props: TooltipProps) => {
         setShow(false);
         clearTimeout(timeOut);
       }}
-      onClick={() => handleClick && handleClick()}
+      onClick={() => {
+        setShow(false);
+        handleClick && handleClick();
+      }}
       className="relative inline-block"
     >
       <div>{children}</div>
       <div ref={child} className={`opacity-animation absolute ${className}`}>
-        {show && (
+        {show && !disabled && (
           <span
             className="whitespace-nowrap text-xs bg-gray-700 
           text-white font-semibold flex p-2 rounded-lg"

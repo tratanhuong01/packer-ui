@@ -3,16 +3,13 @@ import Button from "../../../components/Button";
 import Modal from "../../../components/Modal";
 import { AdminContext } from "../../../contexts/AdminContext/AdminContext";
 import Input from "../../../components/Input";
+import { DisplayComponentProps } from "./type";
 
 const DisplayComponent = ({
   closeModal,
   index,
   handleSubmit,
-}: {
-  closeModal: Function;
-  index: number;
-  handleSubmit: Function;
-}) => {
+}: DisplayComponentProps) => {
   //
   const {
     admin: {

@@ -38,7 +38,7 @@ const InstallationCode = ({
             <li
               onClick={() => setActive(item)}
               className={`cursor-pointer border-b-2 border-solid pb-1 ${
-                active.id === item.id ? "border-blue-500" : "border-transparent"
+                active.id === item.id ? "border-primary" : "border-transparent"
               } px-2`}
             >
               {item.type}

@@ -1,0 +1,9 @@
+.duplicate {
+  & > div {
+    opacity: 0;
+  }
+  &:hover > div {
+    opacity: 1;
+    background-color: #fff;
+  }
+}

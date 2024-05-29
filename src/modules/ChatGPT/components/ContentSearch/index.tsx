@@ -1,18 +1,15 @@
-import { MessageChildProps, TextProps } from "../../interfaces/Message";
+import { TextProps } from "../../interfaces/Message";
 import { useContext, useEffect, useState } from "react";
 import { ChatGPTContext } from "../../../../contexts/ChatGPTContext/ChatGPTContext";
 import TaskbarText from "./TaskbarText";
 import CodeResult from "./CodeResult";
+import { ContentSearchProps } from "./type";
 
 const ContentSearch = ({
   messages,
   scrollTop,
   fetchData,
-}: {
-  messages: MessageChildProps;
-  scrollTop: Function;
-  fetchData: (callback?: (str: string) => void) => Promise<void>;
-}) => {
+}: ContentSearchProps) => {
   //
   const {
     app: { stopRender },

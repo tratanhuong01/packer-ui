@@ -1,18 +1,23 @@
-import { ReactNode, useState } from "react";
+import { ChangeEvent, ReactNode, useState } from "react";
 import ReactSyntaxHighlighter from "react-syntax-highlighter";
 import { stackoverflowDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import Parent from "../../../../components/Parent";
 import Box from "../../../../components/Box";
+import TitleDescription from "../TitleDescription";
 
 const ShowComponent = ({
   component,
   code,
+  title,
 }: {
   component: ReactNode;
   code?: { collapse: string; expand: string };
+  title?: string;
 }) => {
   //
-  const [collapse, setCollapse] = useState(false);
+  const [editor, setEditor] = useState(code);
+  const [show, setShow] = useState(false);
+  const [value, setValue] = useState(editor ? editor.collapse : "");
   const nav = [
     { icon: "bx-bx-user", handle: () => "" },
     { icon: "bx bxl-squarespace", handle: () => "" },
@@ -20,7 +25,7 @@ const ShowComponent = ({
       icon: "bx bx-copy",
       handle: async () => {
         navigator.clipboard.writeText(
-          (!collapse ? code?.collapse : code?.expand) || ""
+          (show ? code?.expand : code?.collapse) || ""
         );
         alert("Copy successfully");
       },
@@ -32,6 +37,7 @@ const ShowComponent = ({
   //
   return (
     <div className="code">
+      <TitleDescription type="normal">{title}</TitleDescription>
       <Parent className="w-full py-8" justify="center" items="center">
         {component}
       </Parent>
@@ -40,12 +46,13 @@ const ShowComponent = ({
         <Parent items="center" gap={5}>
           <span
             onClick={() => {
-              setCollapse(!collapse);
+              setShow(!show);
+              editor && setValue(editor[!show ? "expand" : "collapse"]);
             }}
             className="flex items-center justify-center px-2 py-1 border border-solid border-gray-200 
-            rounded-full text-xs font-semibold text-blue-500 w-24 cursor-pointer whitespace-nowrap"
+            rounded-full text-xs font-semibold text-primary w-24 cursor-pointer whitespace-nowrap"
           >
-            {collapse ? "Collapse code" : "Expand code"}
+            {show ? "Collapse code" : "Expand code"}
           </span>
           {nav.map((item) => (
             <Box
@@ -61,17 +68,32 @@ const ShowComponent = ({
       </Parent>
       {code && (
         <div
-          className="border-2 border-solid border-gray-200 focus-within:border-blue-500 text-xs md:text-base 
-        code rounded-xl overflow-hidden"
+          className="border-2 border-solid border-gray-200 focus-within:border-primary text-xs md:text-base 
+        code rounded-xl overflow-hidden relative"
         >
-          {!collapse ? (
+          <textarea
+            className="absolute top-0 left-0 p-5 right-0 bottom-0 bg-transparent text-transparent 
+            caret-white resize-none"
+            onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+              if (!editor) return;
+              setEditor({
+                ...editor,
+                [show ? "expand" : "collapse"]: e.target.value,
+              });
+              setValue(e.target.value);
+            }}
+            value={value}
+            spellCheck={false}
+          />
+
+          {show ? (
             <ReactSyntaxHighlighter
               language="jsx"
               wrapLines={true}
               // wrapLongLines={true}
               style={stackoverflowDark}
             >
-              {code ? code.collapse : ""}
+              {editor ? editor.expand : " "}
             </ReactSyntaxHighlighter>
           ) : (
             <ReactSyntaxHighlighter
@@ -80,7 +102,7 @@ const ShowComponent = ({
               // wrapLongLines={true}
               style={stackoverflowDark}
             >
-              {code ? code.expand : ""}
+              {editor ? editor.collapse : " "}
             </ReactSyntaxHighlighter>
           )}
         </div>

@@ -6,12 +6,13 @@ interface PropItem {
     detail: { id: number; value: string }[];
   };
   optional: boolean;
+  isAdded?: boolean;
 }
 type AdminContentType = {
   id: number;
   content: string | string[];
-  type: "list" | "description" | "title" | "show" | "normal";
-  renderType: string;
+  // type: "list" | "description" | "title" | "show" | "normal";
+  type: string;
   component: {
     code: {
       expand: string;

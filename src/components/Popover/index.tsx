@@ -1,7 +1,6 @@
 import { useState } from "react";
-import "./index.scss";
-import PopoverProps from "./type";
 import useClickOutside from "../../hooks/useClickOutside";
+import PopoverProps from "./type";
 
 const Popover = (props: PopoverProps) => {
   //
@@ -18,12 +17,13 @@ const Popover = (props: PopoverProps) => {
   //
   return (
     <div className="relative">
-      <div ref={ref} className="relative w-auto inline-block">
+      <div ref={ref} className="relative">
         {children}
         {show && (
           <div
             ref={refPop}
-            className="absolute top-full left-0 mt-2 w-auto z-10 bg-white"
+            className="absolute top-full left-0 mt-1 w-full z-10 bg-white shadow-xl border border-solid 
+            border-gray-200"
           >
             {component}
           </div>

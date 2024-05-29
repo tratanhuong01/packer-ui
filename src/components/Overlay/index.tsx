@@ -1,9 +1,7 @@
-const Overlay = (props: {
-  isPosition?: "fixed" | "absolute";
-  handleClick?: Function;
-}) => {
+import OverlayProps from "./type";
+
+const Overlay = ({ isPosition, handleClick }: OverlayProps) => {
   //
-  const { isPosition, handleClick } = props;
   //
   return (
     <div

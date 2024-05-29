@@ -18,6 +18,14 @@
   transform: translateX(-50%);
 }
 
+.-transform-y-center {
+  transform: translateY(-50%);
+}
+
+.-transform-x-center {
+  transform: translateX(-50%);
+}
+
 .transform-center {
   transform: translate(-50%, -50%);
 }
@@ -88,11 +96,11 @@
 }
 
 div {
-  scrollbar-width: thin;
-  scrollbar-color: transparent transparent;
-  ::-webkit-scrollbar-thumb {
-    background-color: transparent;
-  }
+  // scrollbar-width: thin;
+  // scrollbar-color: transparent transparent;
+  // ::-webkit-scrollbar-thumb {
+  //   background-color: transparent;
+  // }
 }
 
 .z-modal {
@@ -105,4 +113,57 @@ div {
 
 .z-auto-complete {
   z-index: 77777;
+}
+
+.loader-content {
+  animation: fadeInAnimation ease 1s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+@keyframes fadeInAnimation {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOutAnimation {
+  0% {
+    opacity: 1;
+    visibility: visible;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+img {
+  transition: all 0.5s;
+}
+
+.fadeOutAnimation {
+  animation: fadeOutAnimation ease-out 1s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+button:hover .loader {
+  background: radial-gradient(closest-side at 50% 12.5%, #fff 96%, #0000) 50% 0/20%
+      80% repeat-y,
+    radial-gradient(closest-side at 12.5% 50%, #fff 96%, #0000) 0 50%/80% 20%
+      repeat-x;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
 }

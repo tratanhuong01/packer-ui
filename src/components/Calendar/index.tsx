@@ -179,13 +179,13 @@ const Calendar = () => {
                   new Date().getMonth() + 1 === dateCurrent.month &&
                   new Date().getFullYear() === dateCurrent.year &&
                   !item.disabled
-                    ? "text-white bg-blue-500 rounded-full font-semibold border-blue-500 border border-solid"
+                    ? "text-white bg-primary rounded-full font-semibold border-primary border border-solid"
                     : ""
                 } ${
                       item.disabled
                         ? "opacity-40 font-semibold text-gray-500"
                         : ""
-                    } hover:border-blue-500 hover:border hover:border-solid rounded-full`}
+                    } hover:border-primary hover:border hover:border-solid rounded-full`}
                   >
                     {item.number}
                   </div>

@@ -2,9 +2,8 @@ import { createRef, useState } from "react";
 import "./index.scss";
 import RatingProps from "./type";
 
-const Rating = (props: RatingProps) => {
+const Rating = ({ maxStar, current, disabled }: RatingProps) => {
   //
-  const { maxStar, current, disabled } = props;
   const [starCurrent, setStarCurrent] = useState(current);
   const [half, setHalf] = useState(false);
   const hoverStar = (

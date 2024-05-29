@@ -1,17 +1,22 @@
 import { ReactNode } from "react";
 
 type ButtonProps = {
-  id?: string;
+  icon?: string;
   children: ReactNode;
   handleClick?: Function;
   loading?: boolean;
-  disabled?: boolean;
-  mode?: "primary" | "disabled" | "text" | "contained" | "outlined" | "gray";
+  mode?:
+    | "primary"
+    | "disabled"
+    | "text"
+    | "contained"
+    | "outlined"
+    | "gray"
+    | "deleteOutlined";
   href?: string;
   width?: number | string;
   height?: number | string;
-  type?: "submit" | "button" | "reset";
-  className?: string;
+  ping?: boolean;
 };
 
 export default ButtonProps;

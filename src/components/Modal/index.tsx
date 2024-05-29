@@ -1,100 +1,114 @@
-import { ReactNode } from "react";
 import { createPortal } from "react-dom";
 import "./index.scss";
-import Overlay from "../Overlay";
-import ModalProps from "./type";
-import Parent from "../Parent";
-import Box from "../Box";
+import { ModalProps, ModalPortalProps } from "./type";
 import Button from "../Button";
-import useClickOutside from "../../hooks/useClickOutside";
+import { useEffect, useState } from "react";
 
-const Portal = ({
-  children,
-  childrenModal,
-}: {
-  children?: ReactNode;
-  childrenModal?: string;
-}) => {
+const Portal = ({ children }: ModalPortalProps) => {
   //
-  const modalRoot = document.getElementById(
-    childrenModal ? "children-modal-root" : "modal-root"
-  );
+  const modalRoot = document.getElementById("modal-root");
   return createPortal(children, modalRoot || document.body);
 };
 
-const Modal = (props: ModalProps) => {
+const Modal = ({
+  children,
+  width,
+  headerTitle,
+  closeModal,
+  footerButton,
+  footerButtonRender,
+  loading,
+  submitForm,
+  mode,
+  disabledCenter,
+  disableSubmitForm,
+  noPadding,
+}: ModalProps) => {
   //
-  const {
-    children,
-    width,
-    headerTitle,
-    closeModal,
-    footerButton,
-    footerButtonRender,
-    childrenModal,
-  } = props;
-  const refContent = useClickOutside({
-    handleClick: (bool) => {
-      bool && closeModal && closeModal();
-    },
-    status: false,
-  });
+  const [footerButtonI, setFooterButtonI] = useState(footerButton);
+  useEffect(() => {
+    setFooterButtonI(footerButton);
+  }, [footerButton]);
   //
   return (
-    <Portal childrenModal={childrenModal}>
-      <Overlay isPosition={childrenModal ? "absolute" : "fixed"} />
-      <Parent
-        justify="center"
-        items="center"
-        className={`w-full ${
-          childrenModal
-            ? "absolute right-0 bottom-0"
-            : "fixed h-screen zoomIn z-30"
-        } top-0 left-0 `}
+    <Portal>
+      <div
+        onClick={() => closeModal && closeModal()}
+        className="fixed top-0 left-0 bottom-0 right-0 bg-opacity-70 z-30 bg-black"
+      />
+      <div
+        className={`w-full flex ${
+          disabledCenter ? "overflow-y-scroll" : "items-center overflow-hidden"
+        } justify-center fixed z-50 h-screen ${
+          mode === "panel" ? "showIn" : "zoomIn"
+        } z-30 top-0 left-0 `}
       >
-        <div
-          ref={refContent.ref}
-          className="w-full bg-white rounded-sm"
-          style={{ width: `${width || 600}px` }}
+        <form
+          onSubmit={
+            !disableSubmitForm && submitForm
+              ? submitForm
+              : (e: any) => {
+                  e.preventDefault();
+                  submitForm && submitForm();
+                }
+          }
+          className={`w-full bg-white relative flex flex-col ${
+            mode === "panel" ? "h-full ml-auto" : "rounded-lg overflow-hidden"
+          } ${disabledCenter ? "h-max my-20" : ""}`}
+          style={{ width: `${mode === "panel" ? 600 : width || 450}px` }}
         >
           {headerTitle && (
-            <Parent justify="center" items="center">
+            <div
+              className={`flex items-center justify-center p-5 ${
+                noPadding ? "" : "p-5"
+              }`}
+            >
               <div
-                className={`w-full p-3 ${
+                className={`w-full flex items-center ${
                   headerTitle ? "border-b border-solid border-gray-200" : ""
                 } relative`}
               >
                 {headerTitle && (
-                  <p className="text-2xl font-semibold text-center">
-                    {headerTitle}
-                  </p>
+                  <p className="font-semibold pb-4 text-left">{headerTitle}</p>
                 )}
-                <Box
-                  width={36}
-                  height={36}
-                  rounded
-                  handleClick={closeModal}
-                  className="absolute top-3 right-3 cursor-pointer pb-1 text-xl font-bold 
-                    bg-gray-100 text-gray-500"
+                <div
+                  onClick={() => closeModal && closeModal()}
+                  className="w-9 h-9 flex items-center justify-center absolute -top-2 right-0 cursor-pointer pb-1 text-xl font-bold 
+                    bg-gray-100 text-gray-500 z-30"
                 >
                   &times;
-                </Box>
+                </div>
               </div>
-            </Parent>
+            </div>
           )}
-          <div className="p-3">{children}</div>
+          <div
+            className={`${noPadding ? "" : "pl-5 pr-5 pb-5 "}bg-white ${
+              mode === "panel" ? "flex-1" : ""
+            }`.trim()}
+          >
+            {children}
+          </div>
           {footerButtonRender
             ? footerButtonRender
-            : footerButton &&
-              footerButton.length > 0 && (
-                <div className="p-3 w-full border-t border-solid border-gray-300 flex justify-end">
-                  <div>
-                    {footerButton &&
-                      footerButton.map((item) => (
+            : footerButtonI &&
+              footerButtonI.length > 0 && (
+                <div className="px-5">
+                  <div className="py-3 w-full border-t border-solid border-gray-300 flex justify-end items-center gap-3">
+                    {footerButtonI &&
+                      footerButtonI.map((item) => (
                         <Button
+                          type={item.type === "confirm" ? "submit" : "button"}
                           key={item.id}
                           handleClick={item.handle}
-                          mode={item.type === "close" ? "gray" : "primary"}
+                          mode={
+                            item.type === "close"
+                              ? "gray"
+                              : item.type === "confirm"
+                              ? "primary"
+                              : "outlined"
+                          }
+                          disabled={item.disabled}
+                          loading={item.loading}
                         >
                           {item.name}
                         </Button>
@@ -102,8 +116,16 @@ const Modal = (props: ModalProps) => {
                   </div>
                 </div>
               )}
-        </div>
-      </Parent>
+          {loading && (
+            <div
+              className="w-full top-0 left-0 right-0 bottom-0 bg-white bg-opacity-50 absolute 
+            flex items-center justify-center"
+            >
+              <i className="bx bx-loader-alt text-primary text-4xl animate-spin" />
+            </div>
+          )}
+        </form>
+      </div>
     </Portal>
   );
 };

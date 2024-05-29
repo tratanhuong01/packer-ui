@@ -1,9 +1,33 @@
 table {
+  tr.not-bg td {
+    background-color: #fff !important;
+    &:hover {
+      background-color: #fff !important;
+    }
+  }
+  tr.not-bg-loading {
+    &,
+    & td:hover {
+      background-color: #ffffff81 !important;
+    }
+  }
+  tr.not-bg {
+    background-color: #fff !important;
+    &:hover {
+      background-color: #fff !important;
+    }
+  }
+  tr.active {
+    background-color: #faf6f6;
+  }
   tr,
   td {
     &:hover {
       background-color: #faf6f6;
       cursor: pointer;
     }
+  }
+  input[type="checkbox"] {
+    transform: scale(1.2);
   }
 }

@@ -1,10 +1,4 @@
 type InputProps = {
-  id?: string;
-  type: "text" | "number" | "password" | "email" | "search";
-  placeholder?: string;
-  className?: string;
-  name?: string;
-  value?: string | "";
   handleChange?: (value: string) => void;
   handleClick?: Function;
   rounded?: "default" | "full";
@@ -13,6 +7,11 @@ type InputProps = {
   width?: number;
   height?: number;
   error?: string;
+  label?: string;
+  debounce?: {
+    handleStart: () => void;
+    handleCallback: (val: string) => void;
+  };
 };
 
 export default InputProps;

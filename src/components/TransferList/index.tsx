@@ -9,7 +9,6 @@ const TransferList = ({ items }: TransferListType) => {
       return { ...item, checked: false, index };
     })
   );
-  console.log(current);
   const [selected, setSelected] = useState<any[]>([]);
   const handleChecked = (item: any, isLeft: boolean) => {
     const newData = isLeft ? [...current] : [...selected];
@@ -69,7 +68,7 @@ const TransferList = ({ items }: TransferListType) => {
             className={`${
               current.length === 0
                 ? "opacity-80 cursor-not-allowed cursor-pointer text-gray-500 border-gray-300"
-                : "text-blue-500 border-blue-500 cursor-pointer"
+                : "text-primary border-primary cursor-pointer"
             } bx bx-chevrons-right w-16 h-10 flex items-center 
             justify-center border border-solid`}
           ></li>
@@ -78,7 +77,7 @@ const TransferList = ({ items }: TransferListType) => {
             className={`${
               current.filter((item) => item.checked).length === 0
                 ? "opacity-80 cursor-not-allowed cursor-pointer text-gray-500 border-gray-300"
-                : "text-blue-500 border-blue-500 cursor-pointer"
+                : "text-primary border-primary cursor-pointer"
             } bx bx-chevron-right w-16 h-10 flex items-center 
             justify-center border border-solid`}
           ></li>
@@ -87,7 +86,7 @@ const TransferList = ({ items }: TransferListType) => {
             className={`${
               selected.filter((item) => item.checked).length === 0
                 ? "opacity-80 cursor-not-allowed cursor-pointer text-gray-500 border-gray-300"
-                : "text-blue-500 border-blue-500 cursor-pointer"
+                : "text-primary border-primary cursor-pointer"
             } bx bx-chevron-left w-16 h-10 flex items-center 
           justify-center border border-solid`}
           ></li>
@@ -103,7 +102,7 @@ const TransferList = ({ items }: TransferListType) => {
             className={`${
               selected.length === 0
                 ? "opacity-80 cursor-not-allowed cursor-pointer text-gray-500 border-gray-300"
-                : "text-blue-500 border-blue-500 cursor-pointer"
+                : "text-primary border-primary cursor-pointer"
             } bx bx-chevrons-left w-16 h-10 flex items-center 
             justify-center border border-solid`}
           ></li>

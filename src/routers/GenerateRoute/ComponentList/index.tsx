@@ -1,41 +1,57 @@
 import VideoMedia from "../../../components/VideoMedia";
+import LibraryManager from "../../../pages/LibraryManage";
+import AutoCompletePage from "../../../pages/components/AutoComplete";
+import ButtonPage from "../../../pages/components/Button";
+import CalendarPage from "../../../pages/components/Calendar";
+import InputPage from "../../../pages/components/Input";
+import ModalPage from "../../../pages/components/Modal";
+import OTPVerifyPage from "../../../pages/components/OTPVerify/OTPVerifyPage";
+import PaginationPage from "../../../pages/components/Pagination";
+import RatingPage from "../../../pages/components/Rating";
+import TablePage from "../../../pages/components/Table";
 import { ItemGenerateChild } from "../type";
 
 const input: ItemGenerateChild = {
   id: Math.random(),
   name: "Input",
   type: "app",
-  component: <p>Input</p>,
+  component: <InputPage />,
 };
 const button: ItemGenerateChild = {
   id: Math.random(),
   name: "Button",
   type: "app",
-  component: <p>button</p>,
+  component: <ButtonPage />,
 };
 const calendar: ItemGenerateChild = {
   id: Math.random(),
   name: "Calendar",
   type: "app",
-  component: <p>Calendar</p>,
+  component: <CalendarPage />,
+};
+const otp: ItemGenerateChild = {
+  id: Math.random(),
+  name: "OTP",
+  type: "app",
+  component: <OTPVerifyPage />,
 };
 const autoComplete: ItemGenerateChild = {
   id: Math.random(),
   name: "Auto Complete",
   type: "app",
-  component: <p>Auto Complete</p>,
+  component: <AutoCompletePage />,
 };
 const modal: ItemGenerateChild = {
   id: Math.random(),
   name: "Modal",
   type: "app",
-  component: <p>Modal</p>,
+  component: <ModalPage />,
 };
 const rating: ItemGenerateChild = {
   id: Math.random(),
   name: "Rating",
   type: "app",
-  component: <p>Rating</p>,
+  component: <RatingPage />,
 };
 const transferList: ItemGenerateChild = {
   id: Math.random(),
@@ -47,7 +63,7 @@ const pagination: ItemGenerateChild = {
   id: Math.random(),
   name: "Pagination",
   type: "app",
-  component: <p>Pagination</p>,
+  component: <PaginationPage />,
 };
 const tooltip: ItemGenerateChild = {
   id: Math.random(),
@@ -65,7 +81,7 @@ const table: ItemGenerateChild = {
   id: Math.random(),
   name: "Table",
   type: "app",
-  component: <p>Table</p>,
+  component: <TablePage />,
 };
 const parent: ItemGenerateChild = {
   id: Math.random(),
@@ -91,11 +107,18 @@ const videoMedia: ItemGenerateChild = {
   type: "app",
   component: <VideoMedia />,
 };
+const libraryManager: ItemGenerateChild = {
+  id: Math.random(),
+  name: "Library Manager",
+  type: "app",
+  component: <LibraryManager />,
+};
 
 const ComponentList: ItemGenerateChild[] = [
   input,
   button,
   calendar,
+  otp,
   alert,
   box,
   pagination,
@@ -108,6 +131,7 @@ const ComponentList: ItemGenerateChild[] = [
   rating,
   autoComplete,
   videoMedia,
+  libraryManager,
 ];
 
 // eslint-disable-next-line import/no-anonymous-default-export

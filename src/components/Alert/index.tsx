@@ -1,28 +1,42 @@
 import AlertProps from "./type";
 
-const Alert = ({ children, severity }: AlertProps) => {
+const Alert = ({ severity, content, mode }: AlertProps) => {
   //
+  const backgroundComputed = (color: string) =>
+    !mode || mode === "standard"
+      ? `bg-${color}-200 bg-opacity-70`
+      : mode === "filled"
+      ? `bg-${color}-600 text-white`
+      : `bg-white border border-solid border-${color}-600`;
+
+  const colorComputed = (color: string) =>
+    !mode || mode === "standard"
+      ? `text-${color}-500`
+      : mode === "filled"
+      ? "text-white"
+      : "";
+
   const render = (): { background: string; color: string } => {
     switch (severity) {
       case "success":
         return {
-          background: "bg-green-200",
-          color: "bx bx-check-circle text-green-500",
+          background: backgroundComputed("green"),
+          color: "bx bx-check-circle " + colorComputed("green"),
         };
       case "info":
         return {
-          background: "bg-blue-200",
-          color: "bx bx-info-circle text-blue-500",
+          background: backgroundComputed("blue"),
+          color: "bx bx-info-circle " + colorComputed("blue"),
         };
       case "warning":
         return {
-          background: "bg-yellow-200",
-          color: "bx bx-shape-triangle text-yellow-500",
+          background: backgroundComputed("yellow"),
+          color: "bx bx-shape-triangle " + colorComputed("yellow"),
         };
       case "error":
         return {
-          background: "bg-red-200",
-          color: "bx bx-info-circle text-red-500",
+          background: backgroundComputed("red"),
+          color: "bx bx-info-circle " + colorComputed("red"),
         };
       default:
         return {
@@ -35,10 +49,15 @@ const Alert = ({ children, severity }: AlertProps) => {
   //
   return (
     <div
-      className={`p-2 w-80 bg-opacity-70 rounded-sm flex items-center gap-2 ${data.background}`}
+      className={`p-3 w-80 rounded-sm flex items-center gap-2 ${data.background}`}
     >
-      <i className={`text-xl ${data.color}`}></i>
-      <span className="text-sm">{children}</span>
+      <i className={`text-2xl ${data.color}`}></i>
+      <div className="text-sm">
+        <p className={`${data.color.split(" ")[2]} font-bold`}>
+          {content.title}
+        </p>
+        <p className={`text-sm text-gray-700`}>{content.description}</p>
+      </div>
     </div>
   );
 };

@@ -1,7 +1,11 @@
 // import Button from "../../../../components/Button";
+import Alert from "../../../../components/Alert";
 import Button from "../../../../components/Button";
+import { sortBy } from "../../../../utils/utils";
+import Content from "../../../Admin/interfaces/Content";
 import ShowComponent from "../ShowComponent";
-import TitleDescription from "../TitleDescription";
+import ListComponent from "./ListComponent";
+import TitleComponent from "./TitleComponent";
 
 const ComponentDisplay = ({ component }: { component: any }) => {
   const renderComponent = () => {
@@ -16,7 +20,14 @@ const ComponentDisplay = ({ component }: { component: any }) => {
         ) : (
           <Button {...component.props} />
         );
-
+      case "Alert":
+        return component.props ? (
+          <Alert {...component.props} />
+        ) : (
+          <div className="flex my-2 justify-center">
+            <Button mode="outlined">Config component</Button>
+          </div>
+        );
       default:
         return <></>;
     }
@@ -24,41 +35,35 @@ const ComponentDisplay = ({ component }: { component: any }) => {
   return renderComponent();
 };
 
-const RenderComponent = ({ data }: { data: any[] }) => {
+const RenderComponent = ({ data }: { data: Content[] }) => {
   return (
-    <div>
-      {data.map((item: any) => (
-        <RenderComponentByType key={item.id} item={item} />
+    <div className="w-11/12">
+      {sortBy<Content>(data, "index").map((item: Content) => (
+        <div key={Math.random()}>
+          <RenderComponentByType item={item} />
+        </div>
       ))}
     </div>
   );
 };
-const RenderComponentByType = ({ item }: { item: any }) => {
+const RenderComponentByType = ({ item }: { item: Content }) => {
   const renderData = () => {
     switch (item.type.toLowerCase()) {
       case "title":
-        return <TitleDescription type="big">{item.content}</TitleDescription>;
+        return <TitleComponent item={item} type="big" />;
       case "normal":
-        return (
-          <TitleDescription type="normal">{item.children}</TitleDescription>
-        );
-      case "list":
-        return (
-          <ul className={`${item.renderType} pl-5`}>
-            {item.content.map((item: any) => (
-              <li className="mb-2">{item}</li>
-            ))}
-          </ul>
-        );
+        return <TitleComponent item={item} type="normal" />;
       case "description":
-        return <TitleDescription type="small">{item.content}</TitleDescription>;
+        return <TitleComponent item={item} type="description" />;
+      case "list":
+        return <ListComponent item={item} />;
       case "show":
         return (
           <ShowComponent
-            component={<ComponentDisplay component={item.component} />}
+            component={<ComponentDisplay component={item.code} />}
             code={{
-              expand: item.component.code.expand,
-              collapse: item.component.code.collapse,
+              expand: item.code.code.expand,
+              collapse: item.code.code.collapse,
             }}
           />
         );
@@ -68,23 +73,5 @@ const RenderComponentByType = ({ item }: { item: any }) => {
   };
   return renderData();
 };
-/*
-{
-    id: Math.random(),
-    content: string,
-    type: "title" | "list" | "show"  | "description" | "normal",
-    renderType: string || string[],
-    component: {
-        code : {
-            expand: '',
-            collapse: ''
-        },
-        name: string
-        props: {
-
-        }
-    }
-}
-*/
 
 export default RenderComponent;

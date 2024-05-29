@@ -7,6 +7,7 @@ const actions = { ...actionList };
 
 const initialState: StateType = {
   menuActive: false,
+  toasts: [],
 };
 
 const AppContext = createContext<ContextType>({

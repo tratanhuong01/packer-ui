@@ -42,7 +42,7 @@ const Header = ({ isAdmin }: { isAdmin?: boolean }) => {
           className="cursor-pointer"
           handleClick={() => navigate("/")}
         >
-          <i className="bx bxl-meta text-blue-500 text-4xl"></i>
+          <i className="bx bxl-meta text-primary text-4xl"></i>
           <span
             className="font-bold hidden sm:block text-sm text-gray-400"
             style={{ fontFamily: "sans-serif" }}
@@ -89,16 +89,16 @@ const Header = ({ isAdmin }: { isAdmin?: boolean }) => {
       {!isAdmin && (
         <Parent gap={10}>
           <ul className="items-center font-semibold gap-5 hidden md:flex">
-            <li className="cursor-pointer hover:text-blue-500 text-gray-600">
+            <li className="cursor-pointer hover:text-primary text-gray-600">
               Docs
             </li>
-            <li className="cursor-pointer hover:text-blue-500 text-gray-600">
+            <li className="cursor-pointer hover:text-primary text-gray-600">
               Components
             </li>
-            <li className="cursor-pointer hover:text-blue-500 text-gray-600">
+            <li className="cursor-pointer hover:text-primary text-gray-600">
               Blog
             </li>
-            <li className="cursor-pointer hover:text-blue-500 text-gray-600">
+            <li className="cursor-pointer hover:text-primary text-gray-600">
               Show case
             </li>
           </ul>
@@ -117,7 +117,7 @@ const Header = ({ isAdmin }: { isAdmin?: boolean }) => {
                   width={40}
                   height={40}
                   border="border-gray-200 border-solid border"
-                  className={`rounded-xl text-2xl text-blue-500 hover:bg-blue-100 cursor-pointer`}
+                  className={`rounded-xl text-2xl text-primary hover:bg-blue-100 cursor-pointer`}
                 >
                   <i className="bx bx-menu"></i>
                 </Box>
@@ -130,7 +130,7 @@ const Header = ({ isAdmin }: { isAdmin?: boolean }) => {
                   width={40}
                   height={40}
                   border="border-gray-200 border-solid border"
-                  className={`rounded-xl text-2xl text-blue-500 hover:bg-blue-100 cursor-pointer`}
+                  className={`rounded-xl text-2xl text-primary hover:bg-blue-100 cursor-pointer`}
                 >
                   <i className={item.icon}></i>
                 </Box>
