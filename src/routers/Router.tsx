@@ -4,7 +4,10 @@ import Admin from "../modules/Admin";
 import ComponentPage from "../modules/Admin/ComponentPage";
 import PropPage from "../modules/Admin/PropPage";
 import ContentPage from "../modules/Admin/ContentPage";
-import Code from "../pages/LibraryManage";
+import Code from "../pages/Code";
+import Native from "../pages/Native";
+import Projects from "../pages/projects";
+import ChatGPT from "../modules/ChatGPT";
 
 const Router = () => {
   return (
@@ -19,6 +22,21 @@ const Router = () => {
             <Route path="add-content" element={<ContentPage />} />
           </Route>
           <Route key={Math.random()} path={"/code"} element={<Code />} />
+          <Route
+            key={Math.random()}
+            path={"/chat-gpt"}
+            element={
+              <div className="w-full h-screen overflow-hidden">
+                <ChatGPT />
+              </div>
+            }
+          />
+          <Route key={Math.random()} path={"/native"} element={<Native />} />
+          <Route
+            key={Math.random()}
+            path={"/projects"}
+            element={<Projects />}
+          />
           <Route
             path="*"
             element={

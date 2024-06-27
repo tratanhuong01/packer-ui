@@ -5,7 +5,7 @@ const PopupVersionChat = () => {
         <div className="flex items-center gap-2 p-2">
           <i className="bx bxs-bolt"></i>
           <div>
-            <p className="mb-1 font-semibold">GPT-3.5</p>
+            <p className="mb-1 font-semibold">PUI-3.5</p>
             <p className="text-gray-500 text-sm">Great for everyday tasks</p>
           </div>
         </div>
@@ -15,7 +15,7 @@ const PopupVersionChat = () => {
         <div className="flex items-center gap-2 p-2">
           <i className="bx bxs-bolt"></i>
           <div>
-            <p className="mb-1 font-semibold">GPT-3.5</p>
+            <p className="mb-1 font-semibold">PUI-3.5</p>
             <p className="text-gray-500 text-sm">Great for everyday tasks</p>
           </div>
         </div>

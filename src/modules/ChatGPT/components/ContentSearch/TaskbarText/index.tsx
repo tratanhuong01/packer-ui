@@ -105,6 +105,7 @@ const TaskbarText = ({ content, messages, fetchData }: TaskbarTextProps) => {
                   content: contentList,
                   contentSearch: messages.list[messages.index].contentSearch,
                   type: "chatgpt",
+                  rendered: false,
                 };
                 if (indexGenerate !== -1) {
                   newCurrent.messages[indexGenerate] = {

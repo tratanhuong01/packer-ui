@@ -5,7 +5,7 @@ import useSearchData from "../../../../hooks/useSearchData";
 const InputSearch = ({ scrollTop }: { scrollTop: Function }) => {
   //
   const [value, setValue] = useState("");
-  const { handleClick, current, isDone } = useSearchData({
+  const { handleClick, current, isRendering } = useSearchData({
     callback: () => {
       setValue("");
       scrollTop();
@@ -59,15 +59,15 @@ const InputSearch = ({ scrollTop }: { scrollTop: Function }) => {
           onKeyUp={handleKeyPress}
         />
         <Box
-          handleClick={() => handleClick("stop")}
+          handleClick={() => handleClick(!isRendering ? "start" : "stop")}
           width={32}
           height={32}
-          disabled={!(!isDone || value)}
+          disabled={!value && !isRendering}
           className={`rounded-lg absolute top-1/2 transform-y-center right-3 text-2xl ${
             value ? "bg-green-500 cursor-pointer" : ""
-          } ${isDone ? "bg-gray-200" : "cursor-pointer"}`}
+          } ${!isRendering ? "bg-gray-200" : "cursor-pointer"}`}
         >
-          {isDone ? (
+          {!isRendering ? (
             <i className="bx bx-up-arrow-alt text-white" />
           ) : (
             <i className="bx bx-stop-circle"></i>

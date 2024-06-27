@@ -6,6 +6,8 @@ import ContentSearch from "../ContentSearch";
 import { convertHTMLString } from "../../utils";
 import { ChatGPTContext } from "../../../../contexts/ChatGPTContext/ChatGPTContext";
 import Box from "../../../../components/Box";
+import ModalSettings from "../../modals/ModalSettings";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const StartSearch = () => {
   //
@@ -14,6 +16,8 @@ const StartSearch = () => {
     actions: { updateData },
     dispatch,
   } = useContext(ChatGPTContext);
+  const { isAuthenticated, logout, user } = useAuth0();
+  const [showSetting, setShowSetting] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const [show, setShow] = useState(false);
   const scrollTop = () => {
@@ -23,8 +27,9 @@ const StartSearch = () => {
   };
   const fetchData = async (callback?: (str: string) => void) => {
     if (!current) return;
+    dispatch(updateData({ key: "isRendering", value: true }));
     const result = await fetch(
-      `${process.env.REACT_APP_BASE_URL}/v1/chat-gpt`,
+      `${process.env.REACT_APP_BASE_URL}/v3/chat-gpt`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -75,7 +80,7 @@ const StartSearch = () => {
       if (!ref.current) return;
       if (
         ref.current.scrollHeight - ref.current?.clientHeight ===
-        ref.current?.scrollTop
+        Math.round(ref.current?.scrollTop)
       ) {
         setShow(false);
       } else {
@@ -92,24 +97,58 @@ const StartSearch = () => {
   //
   return (
     <Fragment>
-      <div className="absolute top-0 left-0 cursor-pointer bg-white w-full shadow-sm">
+      <div className="absolute top-0 left-0 cursor-pointer bg-white w-full z-50 flex justify-between items-center pr-4">
         <Popover component={<PopupVersionChat />}>
           <div className="flex items-center gap-0.5 p-4">
-            <span className="font-bold text-black">ChatGPT</span>
+            <span className="font-bold text-black">ChatPUI</span>
             <span className="font-semibold">3.5</span>
             <span className="bx bx-chevron-down"></span>
           </div>
         </Popover>
+        {isAuthenticated && (
+          <Popover
+            position="right-0 mt-2"
+            component={
+              <div className="w-72 p-1.5">
+                <div className="flex items-center gap-2 p-2.5 hover:bg-gray-200 hover:bg-opacity-70 rounded-lg">
+                  <i className="bx bx-user"></i>
+                  <span>My GPTs</span>
+                </div>
+                <div className="flex items-center gap-2 p-2.5 hover:bg-gray-200 hover:bg-opacity-70 rounded-lg">
+                  <i className="bx bx-cable-car"></i>
+                  <span>Customize ChatGPT</span>
+                </div>
+                <div
+                  onClick={() => setShowSetting(true)}
+                  className="flex items-center gap-2 mb-2 p-2.5 hover:bg-gray-200 hover:bg-opacity-70 rounded-lg"
+                >
+                  <i className="bx bx-cog"></i>
+                  <span>Settings</span>
+                </div>
+                {showSetting && (
+                  <ModalSettings closeModal={() => setShowSetting(false)} />
+                )}
+                <hr className="h-0.5 bg-gray-100" />
+                <div
+                  onClick={() => logout()}
+                  className="flex items-center mt-1.5 gap-2 p-2.5 hover:bg-gray-200 hover:bg-opacity-70 rounded-lg"
+                >
+                  <i className="bx bx-log-out"></i>
+                  <span>Logout</span>
+                </div>
+              </div>
+            }
+          >
+            <img className="w-9 h-9 rounded-full" src={user?.picture} alt="" />
+          </Popover>
+        )}
       </div>
-      <div className="w-full px-2 h-full flex-1 flex flex-col relative">
+      <div className="w-full pl-2 h-full flex-1 flex flex-col relative">
         {!current && (
           <div className="absolute top-1/3 left-1/2 transform-x-center transform-y-center">
             <div className="text-center mb-2">
-              <i className="bx bx-home-circle text-4xl"></i>
+              <i className="bx bx-home-circle text-5xl"></i>
             </div>
-            <p className="text-xl font-bold text-center">
-              How can I help you today?
-            </p>
           </div>
         )}
         {show && (

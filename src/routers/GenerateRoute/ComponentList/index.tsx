@@ -73,7 +73,7 @@ const tooltip: ItemGenerateChild = {
 };
 const popover: ItemGenerateChild = {
   id: Math.random(),
-  name: "popover",
+  name: "Popover",
   type: "app",
   component: <p>Popover</p>,
 };
@@ -112,6 +112,7 @@ const libraryManager: ItemGenerateChild = {
   name: "Library Manager",
   type: "app",
   component: <LibraryManager />,
+  isFull: true,
 };
 
 const ComponentList: ItemGenerateChild[] = [

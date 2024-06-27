@@ -1,5 +1,5 @@
 import { ChangeEvent, ReactNode, useEffect, useState } from "react";
-import useClickOutside from "../../hooks/useClickOutside";
+import useClickOutside from "../../hooks/useClickOutsideV2";
 import AutoCompleteProps from "./type";
 
 const AutoComplete = <T,>({
@@ -48,7 +48,7 @@ const AutoComplete = <T,>({
       setIsFocus(false);
     }
   };
-  const { ref, refPop } = useClickOutside({ handleClick, status: showPopup });
+  const { ref } = useClickOutside({ handleClick, status: showPopup });
   const data = (() => {
     return !value
       ? options
@@ -85,6 +85,7 @@ const AutoComplete = <T,>({
   return (
     <div
       ref={ref}
+      onClick={() => setShowPopup(!showPopup)}
       className={`w-full p-3 my-2 border-solid ${
         isFocus ? "border border-primary" : "border border-gray-200"
       }  relative rounded-md flex items-center justify-between ${
@@ -124,7 +125,6 @@ const AutoComplete = <T,>({
       ></span>
       {showPopup && (
         <div
-          ref={refPop}
           className="w-full border-solid border-gray-200 border-l border-r z-auto-complete shadow-lg
         absolute top-full left-0 mt-1 bg-white max-h-60 overflow-y-auto z-10 rounded-md"
         >

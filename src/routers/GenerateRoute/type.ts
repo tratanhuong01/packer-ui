@@ -11,4 +11,5 @@ export type ItemGenerateChild = {
   name: string;
   type: "component" | "app" | "doc";
   component: ReactNode | any;
+  isFull?: boolean;
 };

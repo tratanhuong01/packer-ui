@@ -6,9 +6,11 @@ import {
 type StateType = {
   historyList: HistoryProps[];
   current: HistoryProps | null;
-  isDone: boolean;
+  isDone: string[];
   pendingResponse: MessageProps | null;
-  stopRender: number;
+  isRendering: boolean;
+  fullScreen: boolean;
+  user: any;
 };
 
 type StateKey = keyof StateType;

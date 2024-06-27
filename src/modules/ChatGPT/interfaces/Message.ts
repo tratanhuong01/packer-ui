@@ -3,6 +3,7 @@ interface MessageProps {
   type: "user" | "chatgpt";
   content: TextProps[];
   contentSearch?: string;
+  rendered: boolean;
 }
 
 interface TextProps {

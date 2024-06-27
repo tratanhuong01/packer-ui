@@ -56,7 +56,7 @@ type TableProps<T, O> = {
       callback: Function
     ) => Promise<boolean | undefined | void>;
   };
-  hidden?: ("edit" | "delete" | "checkbox" | "add" | "normal")[];
+  hidden?: ("edit" | "delete" | "checkbox" | "add" | "normal" | "search")[];
   handleCheck?: Function;
   disableEdit?: boolean;
   disableDelete?: boolean;

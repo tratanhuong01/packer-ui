@@ -8,8 +8,6 @@ import LeftNavigation from "../modules/UI Components/components/LeftNavigation";
 import GenerateRoute from "../routers/GenerateRoute";
 import { routeFull } from "../utils/utils";
 import NotFound from "../modules/UI Components/components/NotFound";
-import RenderComponent from "../modules/UI Components/components/RenderComponent";
-// import { getAllComponents } from "../modules/Admin/apis";
 
 type WrapperProps = {
   children?: ReactNode;
@@ -39,10 +37,6 @@ const Wrapper = ({ children, notFound, hideContentRight }: WrapperProps) => {
       return;
     }
     let checkIndex = -1;
-    // const newData = [
-    //   ...GenerateRoute,
-    //   { id: Math.random(), name: "Components", items: componentList },
-    // ];
     GenerateRoute.forEach((item: any) => {
       if (!Array.isArray(item.items)) return;
       const check = item.items.findIndex(
@@ -51,22 +45,14 @@ const Wrapper = ({ children, notFound, hideContentRight }: WrapperProps) => {
       );
       if (check !== -1) {
         checkIndex = check;
-        setComponent(item.items[check].contents || item.items[check].component);
+        setComponent(item.items[check]);
         return;
       }
     });
-    if (checkIndex === -1) setComponent(<NotFound />);
+    if (checkIndex === -1)
+      setComponent({ component: <NotFound />, isFull: true });
     //
   }, [location.pathname, componentList]);
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const result = await getAllComponents().then((res) => res.json());
-  //     setComponentList(result);
-  //     setLoading(false);
-  //   };
-  //   fetchData();
-  // }, []);
-  //
   return (
     <div className="w-full overflow-hidden flex flex-col h-screen">
       <Header />
@@ -74,31 +60,14 @@ const Wrapper = ({ children, notFound, hideContentRight }: WrapperProps) => {
         gap={10}
         className="flex-1 relative h-full overflow-y-hidden flex flex-row"
       >
-        {/* {loading ? (
-          <div className="h-full w-full flex items-center justify-center">
-            <i className="bx bx-loader-alt text-4xl animate-spin"></i>
+        <LeftNavigation componentList={componentList} />
+        <div ref={refContent} className="flex-1 relative h-full flex flex-row">
+          <div className="flex-1 p-2 h-full overflow-y-scroll">
+            {component?.component}
           </div>
-        ) : ( */}
-        <>
-          <LeftNavigation componentList={componentList} />
-          <div
-            ref={refContent}
-            className="flex-1 relative h-full flex flex-row"
-          >
-            <div className="flex-1 p-2 h-full overflow-y-scroll">
-              {notFound ? (
-                children
-              ) : component && component.length ? (
-                <RenderComponent data={component} />
-              ) : (
-                component
-              )}
-            </div>
-            {!hideContentRight && <div className="w-80"></div>}
-            <div id="children-modal-root"></div>
-          </div>
-        </>
-        {/* )} */}
+          {!component?.isFull && <div className="w-80"></div>}
+          <div id="children-modal-root"></div>
+        </div>
       </Parent>
     </div>
   );

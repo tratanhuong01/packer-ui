@@ -2,7 +2,7 @@ import { createRef, useState } from "react";
 import "./index.scss";
 import RatingProps from "./type";
 
-const Rating = ({ maxStar, current, disabled }: RatingProps) => {
+const Rating = ({ maxStar, current, disabled, onChange }: RatingProps) => {
   //
   const [starCurrent, setStarCurrent] = useState(current);
   const [half, setHalf] = useState(false);
@@ -14,6 +14,9 @@ const Rating = ({ maxStar, current, disabled }: RatingProps) => {
       setStarCurrent(item + 1);
     }
     setHalf(position.x < position.width / 2);
+  };
+  const onClick = () => {
+    onChange && onChange(half ? starCurrent - 0.5 : starCurrent);
   };
   const refs = Array(maxStar || 5)
     .fill(0)
@@ -42,6 +45,7 @@ const Rating = ({ maxStar, current, disabled }: RatingProps) => {
               });
             }
           }}
+          onClick={onClick}
           key={index}
           className={`text-4xl ${disabled ? "" : "cursor-pointer"} ${
             index <= starCurrent - 1

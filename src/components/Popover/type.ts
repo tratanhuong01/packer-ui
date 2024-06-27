@@ -9,6 +9,7 @@ type PopoverProps = {
     top?: number | string;
     bottom?: number | string;
   };
+  position?: string;
   className?: string;
 };
 

@@ -89,15 +89,6 @@ const LeftNavigation = ({
             parent={item.name}
           />
         ))}
-        <ItemLeftNavigation
-          key={Math.random()}
-          navigation={{
-            id: Math.random(),
-            name: "Components",
-            items: componentList,
-          }}
-          parent={"Components"}
-        />
       </div>
     </div>
   );

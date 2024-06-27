@@ -7,6 +7,9 @@ const StepByStep = ({
   setStepCurrent,
 }: StepByStepProps) => {
   //
+  const Component = steps[stepCurrent]
+    ? () => <></>
+    : steps[stepCurrent].render;
   //
   return (
     <div>
@@ -56,7 +59,7 @@ const StepByStep = ({
         ))}
       </div>
       <div className="w-full py-5">
-        {steps[stepCurrent] && steps[stepCurrent].render}
+        <Component />
       </div>
     </div>
   );

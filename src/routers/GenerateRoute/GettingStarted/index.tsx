@@ -1,17 +1,16 @@
-import VSCodeEditorMini from "../../../components/VSCodeEditorMini";
 import ChatGPT from "../../../modules/ChatGPT";
 import Installation from "../../../modules/UI Components/pages/Installation";
 import ListComponent from "../../../modules/UI Components/pages/ListComponent";
 import Overview from "../../../modules/UI Components/pages/Overview";
 import Usage from "../../../modules/UI Components/pages/Usage";
 import { ItemGenerateChild } from "../type";
-import TicAndToe from "../../../modules/TicAndToe/index";
 //
 const chatGPT: ItemGenerateChild = {
   id: Math.random(),
   name: "Chat GPT",
   type: "app",
   component: <ChatGPT />,
+  isFull: true,
 };
 const installation: ItemGenerateChild = {
   id: Math.random(),
@@ -24,24 +23,13 @@ const listComponent: ItemGenerateChild = {
   name: "List Component",
   type: "component",
   component: <ListComponent />,
+  isFull: true,
 };
 const overview: ItemGenerateChild = {
   id: Math.random(),
   name: "Usage",
   type: "app",
   component: <Usage />,
-};
-const ticAndToe: ItemGenerateChild = {
-  id: Math.random(),
-  name: "Tic and toe",
-  type: "app",
-  component: <TicAndToe />,
-};
-const uiCode: ItemGenerateChild = {
-  id: Math.random(),
-  name: "Visual Studio Code",
-  type: "app",
-  component: <VSCodeEditorMini />,
 };
 const usage: ItemGenerateChild = {
   id: Math.random(),
@@ -61,8 +49,6 @@ const GettingStarted: ItemGenerateChild[] = [
   installation,
   listComponent,
   overview,
-  ticAndToe,
-  uiCode,
   usage,
   vsCode,
 ];

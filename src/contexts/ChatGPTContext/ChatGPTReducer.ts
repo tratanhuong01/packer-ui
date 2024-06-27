@@ -16,8 +16,11 @@ const AppReducer = (state: StateType, action: ActionType) => {
         case "pendingResponse":
           state.pendingResponse = action.payload.value;
           break;
-        case "stopRender":
-          state.stopRender = action.payload.value;
+        case "isRendering":
+          state.isRendering = action.payload.value;
+          break;
+        case "fullScreen":
+          state.fullScreen = action.payload.value;
           break;
         default:
           break;

@@ -4,6 +4,7 @@ import { ChatGPTContext } from "../../../../contexts/ChatGPTContext/ChatGPTConte
 import TaskbarText from "./TaskbarText";
 import CodeResult from "./CodeResult";
 import { ContentSearchProps } from "./type";
+import { saveHistory } from "../../api";
 
 const ContentSearch = ({
   messages,
@@ -12,7 +13,7 @@ const ContentSearch = ({
 }: ContentSearchProps) => {
   //
   const {
-    app: { stopRender },
+    app: { current, isRendering, historyList },
     dispatch,
     actions: { updateData },
   } = useContext(ChatGPTContext);
@@ -21,14 +22,36 @@ const ContentSearch = ({
   const [time, setTime] = useState(0);
   const [index, setIndex] = useState(0);
   let timeOut: any;
-  const callback = () => {
+  const callback = async () => {
     if (time === message.content[index].content.length) {
       if (index + 1 < message.content.length) {
         setTime(0);
         setData([...data, message.content[index]]);
         setIndex(index + 1);
       } else {
-        dispatch(updateData({ key: "isDone", value: true }));
+        dispatch(updateData({ key: "isRendering", value: false }));
+        let temp = { ...current };
+        temp.messages = temp.messages?.map((item) => {
+          item.list = item.list.map((val) => {
+            if (val.id === message.id) {
+              val.rendered = true;
+            }
+            return val;
+          });
+          return item;
+        });
+        dispatch(updateData({ key: "current", value: temp }));
+        await saveHistory({
+          list: historyList.map((item) => {
+            item.messages.map((val) => {
+              val.list = val.list || [];
+              return val;
+            });
+
+            return item;
+          }),
+          userId: "packer.tra",
+        });
         clearTimeout(timeOut);
       }
     } else {
@@ -37,17 +60,20 @@ const ContentSearch = ({
     return;
   };
   useEffect(() => {
-    scrollTop();
-    if (stopRender === message.id) {
-      clearTimeout(timeOut);
+    if (!isRendering) return;
+
+    if (message.rendered) {
+      setData(message.content);
       return;
     }
+    scrollTop();
+
     if (!messages.isLoading && message.type === "chatgpt") {
       // eslint-disable-next-line react-hooks/exhaustive-deps
       timeOut = setTimeout(callback, 5);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [messages.isLoading, time, stopRender]);
+  }, [messages.isLoading, time]);
   useEffect(() => {
     setData([]);
     setIndex(0);
@@ -68,7 +94,7 @@ const ContentSearch = ({
       )}
       <div className="relative">
         <p className="font-bold mb-0.5 text-sm">
-          {message.type === "user" ? "You" : "ChatGPT"}
+          {message.type === "user" ? "You" : "ChatPUI"}
         </p>
         {!messages.isLoading &&
           message.content.map(
@@ -82,7 +108,7 @@ const ContentSearch = ({
                   }}
                 ></p>
               ) : (
-                <CodeResult content={item.content} />
+                <CodeResult key={item.id} content={item.content} />
               ))
           )}
         {messages.isLoading ? (
@@ -107,9 +133,9 @@ const ContentSearch = ({
             }
           />
         )}
-
         {message.type === "chatgpt" &&
-          message.content.length === data.length + 1 && (
+          (message.content.length === data.length + 1 ||
+            message.content.length === data.length) && (
             <TaskbarText
               content={messages.list[messages.index].content
                 .map((item) => item.content)

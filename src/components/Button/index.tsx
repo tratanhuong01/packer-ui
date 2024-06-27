@@ -75,7 +75,7 @@ const Button = (
       type={type || "button"}
       ref={ref}
       onClick={handleClickOverride}
-      className={`py-3 relative rounded-md transition whitespace-nowrap rounded-lg px-4 ${generateClassMode()} ${
+      className={`py-2.5 relative rounded-md transition whitespace-nowrap rounded-lg px-4 ${generateClassMode()} ${
         !mode ? "text-button" : ""
       } disabled:bg-gray-600 disabled:hover:bg-gray-500 disabled:text-white disabled:cursor-not-allowed flex 
       items-center justify-center ${className} disabled:border-gray-500`}

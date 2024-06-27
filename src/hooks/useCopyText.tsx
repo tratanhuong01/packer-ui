@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 
-const useCopyText = (content: string) => {
+const useCopyText = (content?: string, callback?: Function) => {
   const [copy, setCopy] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [time, setTime] = useState(2);
   const handleClick = () => {
     setCopy(true);
-    navigator.clipboard.writeText(content);
+    setLoading(true);
+    navigator.clipboard.writeText(content || "");
   };
   let timeOut: any;
 
@@ -17,13 +19,15 @@ const useCopyText = (content: string) => {
       if (time === 0) {
         setTime(2);
         setCopy(false);
+        setLoading(false);
         clearTimeout(timeOut);
+        callback && callback();
         return;
       }
       setTime(time - 1);
     }, 500);
   }, [time, copy]);
-  return { copy, handleClick };
+  return { copy, handleClick, loading };
 };
 
 export default useCopyText;

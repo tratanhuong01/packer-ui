@@ -35,13 +35,15 @@ const Modal = ({
       <div
         onClick={() => closeModal && closeModal()}
         className="fixed top-0 left-0 bottom-0 right-0 bg-opacity-70 z-30 bg-black"
+        style={{ zIndex: 9999999 }}
       />
       <div
         className={`w-full flex ${
           disabledCenter ? "overflow-y-scroll" : "items-center overflow-hidden"
-        } justify-center fixed z-50 h-screen ${
+        } justify-center fixed h-screen ${
           mode === "panel" ? "showIn" : "zoomIn"
         } z-30 top-0 left-0 `}
+        style={{ zIndex: 9999999 }}
       >
         <form
           onSubmit={
@@ -129,5 +131,7 @@ const Modal = ({
     </Portal>
   );
 };
+
+export { Portal };
 
 export default Modal;

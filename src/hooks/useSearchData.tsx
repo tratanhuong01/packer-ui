@@ -8,7 +8,8 @@ import {
 type SearchDataResponse = {
   handleClick: (type: "stop" | "start") => void;
   current: HistoryProps | null;
-  isDone: boolean;
+  isDone: string[];
+  isRendering: boolean;
 };
 
 type SearchDataProps = {
@@ -21,18 +22,26 @@ const useSearchData = ({
   callback,
 }: SearchDataProps): SearchDataResponse => {
   const {
-    app: { current, historyList, isDone },
+    app: { current, historyList, isDone, isRendering, pendingResponse },
     dispatch,
     actions: { updateData },
   } = useContext(ChatGPTContext);
 
   const handleClick = (type: "stop" | "start") => {
-    if (type === "stop" && !isDone) {
-      dispatch(updateData({ key: "stopRender", value: current?.id }));
-      dispatch(updateData({ key: "isDone", value: true }));
+    dispatch(
+      updateData({ key: "isRendering", value: type === "stop" ? false : true })
+    );
+    if (type === "stop") {
+      dispatch(
+        updateData({
+          key: "isDone",
+          value: pendingResponse?.id
+            ? [...isDone, pendingResponse?.id]
+            : isDone,
+        })
+      );
       return;
     }
-    if (!value && !isDone) return;
     const chatGPT: MessageChildProps = {
       id: Math.random(),
       list: [
@@ -41,6 +50,7 @@ const useSearchData = ({
           type: "chatgpt",
           content: [],
           contentSearch: value,
+          rendered: false,
         },
       ],
       index: 0,
@@ -60,6 +70,7 @@ const useSearchData = ({
                 type: "text",
               },
             ],
+            rendered: true,
           },
         ],
         index: 0,
@@ -98,11 +109,10 @@ const useSearchData = ({
       })
     );
     dispatch(updateData({ key: "pendingResponse", value: chatGPT }));
-    dispatch(updateData({ key: "isDone", value: false }));
     callback && callback();
   };
 
-  return { handleClick, current, isDone };
+  return { handleClick, current, isDone, isRendering };
 };
 
 export default useSearchData;

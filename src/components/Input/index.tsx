@@ -120,7 +120,7 @@ const Input = (props: InputProps & InputHTMLAttributes<HTMLInputElement>) => {
           placeholder={mode === "normal" ? placeholder : ""}
           className={`w-full h-full bg-transparent ${
             mode === "normal" || mode === "outlined"
-              ? "border-solid border-gray-200 border focus:border-primary"
+              ? "border-solid border-gray-200 border-2 focus:border-primary"
               : mode === "standard"
               ? "border-b-8 border-transparent border-b-solid border-b-gray-200"
               : "border-none"
