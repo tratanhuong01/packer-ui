@@ -7,7 +7,7 @@ import {
   MessageProps,
 } from "../../../interfaces/Message";
 import { ChatGPTContext } from "../../../../../contexts/ChatGPTContext/ChatGPTContext";
-import { convertHTMLString } from "../../../utils";
+import { convertHTMLString, generateUUID } from "../../../utils";
 import { TaskbarTextProps } from "../type";
 
 const TaskbarText = ({ content, messages, fetchData }: TaskbarTextProps) => {
@@ -101,7 +101,7 @@ const TaskbarText = ({ content, messages, fetchData }: TaskbarTextProps) => {
               await fetchData((result) => {
                 const contentList = convertHTMLString(result);
                 const message: MessageProps = {
-                  id: Math.random(),
+                  id: generateUUID(),
                   content: contentList,
                   contentSearch: messages.list[messages.index].contentSearch,
                   type: "chatgpt",

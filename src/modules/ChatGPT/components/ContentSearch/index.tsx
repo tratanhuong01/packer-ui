@@ -5,15 +5,16 @@ import TaskbarText from "./TaskbarText";
 import CodeResult from "./CodeResult";
 import { ContentSearchProps } from "./type";
 import { saveHistory } from "../../api";
-
+import { useAuth0 } from "@auth0/auth0-react";
 const ContentSearch = ({
   messages,
   scrollTop,
   fetchData,
 }: ContentSearchProps) => {
   //
+  const { user } = useAuth0();
   const {
-    app: { current, isRendering, historyList },
+    app: { current, isRendering },
     dispatch,
     actions: { updateData },
   } = useContext(ChatGPTContext);
@@ -32,7 +33,8 @@ const ContentSearch = ({
         dispatch(updateData({ key: "isRendering", value: false }));
         let temp = { ...current };
         temp.messages = temp.messages?.map((item) => {
-          item.list = item.list.map((val) => {
+          item.list = (item.list || []).map((val) => {
+            val.contentSearch = val.contentSearch || "";
             if (val.id === message.id) {
               val.rendered = true;
             }
@@ -42,15 +44,8 @@ const ContentSearch = ({
         });
         dispatch(updateData({ key: "current", value: temp }));
         await saveHistory({
-          list: historyList.map((item) => {
-            item.messages.map((val) => {
-              val.list = val.list || [];
-              return val;
-            });
-
-            return item;
-          }),
-          userId: "packer.tra",
+          history: temp,
+          userId: "packer-tra",
         });
         clearTimeout(timeOut);
       }
@@ -60,12 +55,11 @@ const ContentSearch = ({
     return;
   };
   useEffect(() => {
-    if (!isRendering) return;
-
     if (message.rendered) {
       setData(message.content);
       return;
     }
+    if (!isRendering) return;
     scrollTop();
 
     if (!messages.isLoading && message.type === "chatgpt") {
@@ -75,7 +69,9 @@ const ContentSearch = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages.isLoading, time]);
   useEffect(() => {
-    setData([]);
+    if (!message.rendered) {
+      setData([]);
+    }
     setIndex(0);
     setTime(0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -84,11 +80,7 @@ const ContentSearch = ({
   return (
     <div className="flex items-start gap-5 w-full pb-8">
       {message.type === "user" ? (
-        <img
-          src="https://lh3.googleusercontent.com/a/ACg8ocJ4l-iCA_7EYjxAsxpeZqcsNbym42jlFQo5GLP_PK_KfA=s96-c"
-          alt=""
-          className="w-6 h-6 rounded-full"
-        />
+        <img src={user?.picture} alt="" className="w-6 h-6 rounded-full" />
       ) : (
         <i className="bx bx-home-alt text-xl" />
       )}
@@ -115,23 +107,19 @@ const ContentSearch = ({
           <div>
             <span className="bx bx-loader-alt animate-spin text-green-500"></span>
           </div>
-        ) : message.content[index].type === "text" ? (
-          <p
-            dangerouslySetInnerHTML={{
-              __html:
-                message.type === "user"
-                  ? message.content[index].content
-                  : message.content[index].content.slice(0, time),
-            }}
-          ></p>
         ) : (
-          <CodeResult
-            content={
-              message.type === "user"
-                ? message.content[index].content
-                : message.content[index].content.slice(0, time)
-            }
-          />
+          message.type === "chatgpt" &&
+          (message.content[index].type === "text" ? (
+            <p
+              dangerouslySetInnerHTML={{
+                __html: message.content[index].content.slice(0, time),
+              }}
+            ></p>
+          ) : (
+            <CodeResult
+              content={message.content[index].content.slice(0, time)}
+            />
+          ))
         )}
         {message.type === "chatgpt" &&
           (message.content.length === data.length + 1 ||

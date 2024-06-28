@@ -1,5 +1,5 @@
 interface MessageProps {
-  id: number;
+  id: string;
   type: "user" | "chatgpt";
   content: TextProps[];
   contentSearch?: string;
@@ -7,19 +7,19 @@ interface MessageProps {
 }
 
 interface TextProps {
-  id: number;
+  id: string;
   content: string;
   type: "text" | "code";
 }
 
 interface HistoryProps {
-  id: number;
+  id: string;
   name: string;
   messages: MessageChildProps[];
 }
 
 interface MessageChildProps {
-  id: number;
+  id: string;
   list: MessageProps[];
   isLoading: boolean;
   index: number;

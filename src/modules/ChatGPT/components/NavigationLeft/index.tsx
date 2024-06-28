@@ -5,19 +5,20 @@ import ItemResultSearch from "../ItemResultSearch";
 import { ChatGPTContext } from "../../../../contexts/ChatGPTContext/ChatGPTContext";
 import Button from "../../../../components/Button";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useNavigate } from "react-router-dom";
 
 const NavigationLeft = () => {
   //
   const { isAuthenticated } = useAuth0();
   const {
-    app: { historyList, fullScreen },
+    app: { historyList, fullScreen, current },
     dispatch,
     actions: { updateData },
   } = useContext(ChatGPTContext);
   const box =
     "w-10 h-10 hover:bg-gray-200 cursor-pointer text-xl flex justify-center items-center rounded-lg";
-  const { loginWithPopup, user } = useAuth0();
-  console.log(user);
+  const { loginWithPopup } = useAuth0();
+  const navigate = useNavigate();
   //
   return fullScreen ? (
     <Parent className="w-72 flex flex-col py-2 px-3 bg-gray-100 bg-opacity-50">
@@ -33,6 +34,7 @@ const NavigationLeft = () => {
         <div
           onClick={() => {
             dispatch(updateData({ key: "current", value: null }));
+            navigate(`/chat-gpt`);
           }}
           className={`${box}`}
         >
@@ -40,20 +42,34 @@ const NavigationLeft = () => {
         </div>
       </div>
       <div className="flex flex-col flex-1">
-        <div className="flex-1 pt-8">
+        <div className="flex-1 pt-8 flex flex-col gap-1">
           <p className="text-xs font-bold mb-2 text-gray-500">Today</p>
           {historyList.map((item) => (
             <ItemResultSearch
               key={item.id}
               history={item}
-              handleRemove={() => {
-                dispatch(updateData({ key: "current", value: null }));
+              handleRemove={async () => {
+                await fetch(
+                  `${process.env.REACT_APP_BASE_URL}/api/chat-gpt/history/delete?userId=packer-tra&historyId=${item.id}`,
+                  {
+                    method: "DELETE",
+                  }
+                ).then((res) => res.json());
+                dispatch(
+                  updateData({
+                    key: "current",
+                    value: current?.id === item.id ? null : current,
+                  })
+                );
                 dispatch(
                   updateData({
                     key: "historyList",
                     value: historyList.filter((val) => item.id !== val.id),
                   })
                 );
+                if (item.id === current?.id) {
+                  navigate(`/chat-gpt`);
+                }
               }}
             />
           ))}

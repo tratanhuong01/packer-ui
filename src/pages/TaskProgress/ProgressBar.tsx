@@ -15,7 +15,6 @@ const ProgressBar = memo(({ item }: ItemTaskProgressProps) => {
         .map((item) => data[item])
         .filter((item) => item === "success");
       if (check.length === taskMerge.length - 1) {
-        console.log("Done......");
       }
       const index = taskMerge.findIndex((task) => task.id === item.id);
       if (index === -1) return;

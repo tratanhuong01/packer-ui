@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Modal from "../../../../components/Modal";
 
 const ModalDelete = ({
@@ -7,8 +8,10 @@ const ModalDelete = ({
   closeModal: Function;
   handleDelete: Function;
 }) => {
+  const [loading, setLoading] = useState(false);
   return (
     <Modal
+      loading={loading}
       width={500}
       headerTitle="Delete chat?"
       closeModal={closeModal}
@@ -24,7 +27,8 @@ const ModalDelete = ({
           name: "Delete",
           type: "confirm",
           handle: async () => {
-            handleDelete();
+            setLoading(true);
+            await handleDelete();
           },
         },
       ]}

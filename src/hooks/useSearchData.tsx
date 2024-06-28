@@ -4,6 +4,8 @@ import {
   HistoryProps,
   MessageChildProps,
 } from "../modules/ChatGPT/interfaces/Message";
+import { generateUUID } from "../modules/ChatGPT/utils";
+import { useNavigate } from "react-router-dom";
 
 type SearchDataResponse = {
   handleClick: (type: "stop" | "start") => void;
@@ -26,7 +28,7 @@ const useSearchData = ({
     dispatch,
     actions: { updateData },
   } = useContext(ChatGPTContext);
-
+  const navigate = useNavigate();
   const handleClick = (type: "stop" | "start") => {
     dispatch(
       updateData({ key: "isRendering", value: type === "stop" ? false : true })
@@ -43,10 +45,10 @@ const useSearchData = ({
       return;
     }
     const chatGPT: MessageChildProps = {
-      id: Math.random(),
+      id: generateUUID(),
       list: [
         {
-          id: Math.random(),
+          id: generateUUID(),
           type: "chatgpt",
           content: [],
           contentSearch: value,
@@ -58,14 +60,14 @@ const useSearchData = ({
     };
     const dataPush: MessageChildProps[] = [
       {
-        id: Math.random(),
+        id: generateUUID(),
         list: [
           {
-            id: Math.random(),
+            id: generateUUID(),
             type: "user",
             content: [
               {
-                id: Math.random(),
+                id: generateUUID(),
                 content: value,
                 type: "text",
               },
@@ -84,12 +86,13 @@ const useSearchData = ({
     let newCurrent: HistoryProps | null = current;
     if (index === -1) {
       newCurrent = {
-        id: Math.random(),
-        name: "NewChat." + Math.random(),
+        id: generateUUID(),
+        name: generateUUID(),
         messages: dataPush,
       };
 
       newHistoryList = [...newHistoryList, newCurrent];
+      navigate(`/chat-gpt/${newCurrent.id}`);
     } else {
       if (current) {
         newCurrent = { ...current };

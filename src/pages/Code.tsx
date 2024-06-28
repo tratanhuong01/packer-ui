@@ -1,13 +1,7 @@
 const Code = () => {
   //
   //
-  return (
-    <div className="block">
-      <span>Abc</span>
-      <span>Abc</span>
-      <span>Abc</span>
-    </div>
-  );
+  return <div className="block"></div>;
 };
 
 export default Code;

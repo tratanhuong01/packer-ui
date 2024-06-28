@@ -74,19 +74,26 @@ const StartSearch = () => {
 
     scrollTop();
   };
+  const onScroll = () => {
+    if (!ref.current) return;
+    if (
+      ref.current.scrollHeight - ref.current?.clientHeight ===
+      Math.round(ref.current?.scrollTop)
+    ) {
+      setShow(false);
+    } else {
+      setShow(true);
+    }
+  };
   useEffect(() => {
     if (!ref.current) return;
-    ref.current.addEventListener("scroll", () => {
-      if (!ref.current) return;
-      if (
-        ref.current.scrollHeight - ref.current?.clientHeight ===
-        Math.round(ref.current?.scrollTop)
-      ) {
-        setShow(false);
-      } else {
-        setShow(true);
-      }
-    });
+    ref.current.addEventListener("scroll", onScroll);
+  }, [current]);
+  useEffect(() => {
+    const timeOut = setTimeout(() => {
+      scrollTop();
+      clearTimeout(timeOut);
+    }, 500);
   }, []);
   useEffect(() => {
     if (pendingResponse) {
@@ -105,6 +112,9 @@ const StartSearch = () => {
             <span className="bx bx-chevron-down"></span>
           </div>
         </Popover>
+        {showSetting && (
+          <ModalSettings closeModal={() => setShowSetting(false)} />
+        )}
         {isAuthenticated && (
           <Popover
             position="right-0 mt-2"
@@ -125,9 +135,6 @@ const StartSearch = () => {
                   <i className="bx bx-cog"></i>
                   <span>Settings</span>
                 </div>
-                {showSetting && (
-                  <ModalSettings closeModal={() => setShowSetting(false)} />
-                )}
                 <hr className="h-0.5 bg-gray-100" />
                 <div
                   onClick={() => logout()}
@@ -164,10 +171,7 @@ const StartSearch = () => {
             <i className="bx bx-down-arrow-alt" />
           </Box>
         )}
-        <div
-          ref={ref}
-          className="flex-1 pt-20 pt-10 overflow-y-auto px-3 scroll-"
-        >
+        <div ref={ref} className="flex-1 pt-20 pt-10 overflow-y-auto px-3">
           {current &&
             current.messages.map((messages) => (
               <ContentSearch

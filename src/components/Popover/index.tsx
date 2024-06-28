@@ -1,25 +1,17 @@
-import { useState } from "react";
-import useClickOutside from "../../hooks/useClickOutsideV2";
+import useClickOutside from "../../hooks/useClickOutsideV3";
 import PopoverProps from "./type";
 
 const Popover = (props: PopoverProps) => {
   //
-  const [show, setShow] = useState(false);
   const { component, children, className, position } = props;
-  const handleClick = (outside: Boolean | null) => {
-    setShow(!outside);
-  };
-  const { ref } = useClickOutside({
-    handleClick,
-    status: show,
-  });
+  const { isOpen, ref, refPopup, setIsOpen } = useClickOutside();
   //
   return (
     <div ref={ref} className="relative">
-      <div onClick={() => setShow(!show)}>{children}</div>
-      {show && (
+      <div onClick={() => setIsOpen(!isOpen)}>{children}</div>
+      {isOpen && (
         <div
-          // onClick={() => setShow(false)}
+          ref={refPopup}
           className={`absolute top-full ${
             position || "left-0 mt-0"
           } z-5 bg-white rounded-lg border border-solid overflow-hidden shadow-lg 

@@ -49,19 +49,17 @@ const ModalShare = ({ closeModal }: { closeModal: Function }) => {
         />
         <Button
           width={130}
-          onClick={() => {
-            handleClick();
-          }}
+          onClick={handleClick}
           className="rounded-full bg-black text-white"
         >
-          <div className="flex items-center gap-2">
+          <div className="text-white flex items-center gap-2">
             {loading ? (
               <i className="bx bx-loader-circle animate-spin"></i>
             ) : (
               <i className="bx bx-copy"></i>
             )}
 
-            <span>
+            <span className="text-white">
               {loading ? "Copying" : !success ? "Create link" : "Copied"}
             </span>
           </div>

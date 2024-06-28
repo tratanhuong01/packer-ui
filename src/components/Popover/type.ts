@@ -11,6 +11,7 @@ type PopoverProps = {
   };
   position?: string;
   className?: string;
+  hidden?: boolean;
 };
 
 export default PopoverProps;
