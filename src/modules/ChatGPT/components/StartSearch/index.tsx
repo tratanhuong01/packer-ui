@@ -29,7 +29,9 @@ const StartSearch = () => {
     if (!current) return;
     dispatch(updateData({ key: "isRendering", value: true }));
     const result = await fetch(
-      `${process.env.REACT_APP_BASE_URL}/v3/chat-gpt`,
+      `${process.env.REACT_APP_BASE_URL}/v${Math.floor(
+        Math.random() * (4 - 2 + 1) + 2
+      )}/chat-gpt`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
