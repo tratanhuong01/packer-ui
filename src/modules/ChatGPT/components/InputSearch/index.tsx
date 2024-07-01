@@ -63,8 +63,8 @@ const InputSearch = ({ scrollTop }: { scrollTop: Function }) => {
           width={32}
           height={32}
           disabled={!value && !isRendering}
-          className={`rounded-lg absolute top-1/2 transform-y-center right-3 text-2xl ${
-            value ? "bg-green-500 cursor-pointer" : ""
+          className={`rounded-full absolute top-1/2 transform-y-center right-3 text-2xl ${
+            value ? "bg-black cursor-pointer" : ""
           } ${!isRendering ? "bg-gray-200" : "cursor-pointer"}`}
         >
           {!isRendering ? (

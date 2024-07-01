@@ -35,7 +35,7 @@ const WrapperChatGPT = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
   useEffect(() => {
-    if (historyId) {
+    if (historyId && user) {
       const fetchData = async () => {
         setGetting(true);
         const result = await fetch(
@@ -51,7 +51,7 @@ const WrapperChatGPT = () => {
       setGetting(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [historyId]);
+  }, [historyId, user]);
   const { isLoading } = useAuth0();
   //
   return (

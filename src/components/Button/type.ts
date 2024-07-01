@@ -12,11 +12,12 @@ type ButtonProps = {
     | "contained"
     | "outlined"
     | "gray"
-    | "deleteOutlined";
+    | "delete";
   href?: string;
   width?: number | string;
   height?: number | string;
   ping?: boolean;
+  rounded?: "sm" | "xs" | "md" | "lg" | "xl" | "2xl" | "full";
 };
 
 export default ButtonProps;

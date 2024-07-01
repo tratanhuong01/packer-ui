@@ -6,6 +6,7 @@ import {
 } from "../modules/ChatGPT/interfaces/Message";
 import { generateUUID } from "../modules/ChatGPT/utils";
 import { useNavigate } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
 
 type SearchDataResponse = {
   handleClick: (type: "stop" | "start") => void;
@@ -28,6 +29,7 @@ const useSearchData = ({
     dispatch,
     actions: { updateData },
   } = useContext(ChatGPTContext);
+  const { user } = useAuth0();
   const navigate = useNavigate();
   const handleClick = (type: "stop" | "start") => {
     dispatch(
@@ -92,7 +94,9 @@ const useSearchData = ({
       };
 
       newHistoryList = [...newHistoryList, newCurrent];
-      navigate(`/chat-gpt/${newCurrent.id}`);
+      if (user) {
+        navigate(`/chat-gpt/${newCurrent.id}`);
+      }
     } else {
       if (current) {
         newCurrent = { ...current };
@@ -105,12 +109,14 @@ const useSearchData = ({
         value: newCurrent,
       })
     );
-    dispatch(
-      updateData({
-        key: "historyList",
-        value: [...newHistoryList],
-      })
-    );
+    if (user) {
+      dispatch(
+        updateData({
+          key: "historyList",
+          value: [...newHistoryList],
+        })
+      );
+    }
     dispatch(updateData({ key: "pendingResponse", value: chatGPT }));
     callback && callback();
   };

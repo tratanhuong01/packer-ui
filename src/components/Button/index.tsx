@@ -18,6 +18,7 @@ const Button = (
     icon,
     ping,
     disabled,
+    rounded,
   } = props;
   const [isLoading, setIsLoading] = useState(loading);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -25,8 +26,8 @@ const Button = (
   const [modeCurrent, setModeCurrent] = useState(mode);
   const generateClassMode = (): string => {
     switch (modeCurrent) {
-      case "deleteOutlined":
-        return `border border-solid border-red-300 hover:bg-red-600 hover:text-white text-red-500`;
+      case "delete":
+        return `border border-solid border-500 hover:bg-red-600 bg-red-500 text-white`;
       case "primary":
         return `border border-solid border-primary bg-primary hover:bg-primary text-white`;
       case "gray":
@@ -36,7 +37,7 @@ const Button = (
       case "contained":
         return `border border-solid border-primary bg-primary hover:bg-primary text-white`;
       default:
-        return `border-none text-primary`;
+        return `border-none ${className || "text-primary"}`;
     }
   };
   const handleClickOverride = async (e: any) => {
@@ -60,6 +61,7 @@ const Button = (
     delete temp.href;
     delete temp.width;
     delete temp.height;
+    delete temp.rounded;
     delete temp.ping;
     return temp;
   };
@@ -75,10 +77,12 @@ const Button = (
       type={type || "button"}
       ref={ref}
       onClick={handleClickOverride}
-      className={`py-2.5 relative rounded-md transition whitespace-nowrap rounded-lg px-4 ${generateClassMode()} ${
+      className={`py-2 relative transition whitespace-nowrap ${
+        rounded ? `rounded-${rounded}` : "rounded-lg"
+      } px-4 ${generateClassMode()} ${
         !mode ? "text-button" : ""
       } disabled:bg-gray-600 disabled:hover:bg-gray-500 disabled:text-white disabled:cursor-not-allowed flex 
-      items-center justify-center ${className} disabled:border-gray-500`}
+      items-center justify-center text-base ${className} disabled:border-gray-500`}
       style={
         loading
           ? { width: 48, height: 48 }
@@ -99,7 +103,7 @@ const Button = (
       ) : icon ? (
         <div className="flex items-center gap-2.5">
           <span className={icon}></span>
-          <span>{children}</span>
+          <span className="text-base">{children}</span>
         </div>
       ) : (
         children

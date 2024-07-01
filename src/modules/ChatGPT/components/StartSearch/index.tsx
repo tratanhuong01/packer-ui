@@ -90,6 +90,9 @@ const StartSearch = () => {
   useEffect(() => {
     if (!ref.current) return;
     ref.current.addEventListener("scroll", onScroll);
+    if (current) {
+      setShow(false);
+    }
   }, [current]);
   useEffect(() => {
     const timeOut = setTimeout(() => {

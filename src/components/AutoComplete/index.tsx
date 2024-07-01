@@ -86,7 +86,7 @@ const AutoComplete = <T,>({
     <div
       ref={ref}
       onClick={() => setShowPopup(!showPopup)}
-      className={`w-full p-3 my-2 border-solid ${
+      className={`w-full p-2 my-2 border-solid ${
         isFocus ? "border border-primary" : "border border-gray-200"
       }  relative rounded-md flex items-center justify-between ${
         disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"

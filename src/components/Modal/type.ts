@@ -7,6 +7,14 @@ type ItemFooterButtonProps = {
   type: "other" | "confirm" | "close";
   disabled?: boolean;
   loading?: boolean;
+  customMode?:
+    | "primary"
+    | "disabled"
+    | "text"
+    | "contained"
+    | "outlined"
+    | "gray"
+    | "delete";
 };
 
 type ModalProps = {
@@ -25,6 +33,8 @@ type ModalProps = {
   disabledCenter?: boolean;
   disableSubmitForm?: boolean;
   noPadding?: boolean;
+  noAnimate?: boolean;
+  invisible?: boolean;
 };
 
 type ModalPortalProps = {

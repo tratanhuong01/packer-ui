@@ -23,6 +23,8 @@ const Modal = ({
   disabledCenter,
   disableSubmitForm,
   noPadding,
+  noAnimate,
+  invisible,
 }: ModalProps) => {
   //
   const [footerButtonI, setFooterButtonI] = useState(footerButton);
@@ -41,8 +43,8 @@ const Modal = ({
         className={`w-full flex ${
           disabledCenter ? "overflow-y-scroll" : "items-center overflow-hidden"
         } justify-center fixed h-screen ${
-          mode === "panel" ? "showIn" : "zoomIn"
-        } z-30 top-0 left-0 `}
+          noAnimate ? "" : mode === "panel" ? "showIn" : "zoomIn"
+        } z-30 top-0 left-0 ${invisible ? "hidden" : ""}`}
         style={{ zIndex: 9999999 }}
       >
         <form
@@ -103,11 +105,12 @@ const Modal = ({
                           key={item.id}
                           handleClick={item.handle}
                           mode={
-                            item.type === "close"
+                            item.customMode ||
+                            (item.type === "close"
                               ? "gray"
                               : item.type === "confirm"
                               ? "primary"
-                              : "outlined"
+                              : "outlined")
                           }
                           disabled={item.disabled}
                           loading={item.loading}

@@ -26,6 +26,7 @@ const ModalDelete = ({
           id: Math.random(),
           name: "Delete",
           type: "confirm",
+          customMode: "delete",
           handle: async () => {
             setLoading(true);
             await handleDelete();

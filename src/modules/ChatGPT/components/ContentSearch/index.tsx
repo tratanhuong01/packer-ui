@@ -43,10 +43,12 @@ const ContentSearch = ({
           return item;
         });
         dispatch(updateData({ key: "current", value: temp }));
-        await saveHistory({
-          history: temp,
-          userId: "packer-tra",
-        });
+        if (user) {
+          await saveHistory({
+            history: temp,
+            userId: "packer-tra",
+          });
+        }
         clearTimeout(timeOut);
       }
     } else {
@@ -80,7 +82,11 @@ const ContentSearch = ({
   return (
     <div className="flex items-start gap-5 w-full pb-8">
       {message.type === "user" ? (
-        <img src={user?.picture} alt="" className="w-6 h-6 rounded-full" />
+        user ? (
+          <img src={user?.picture} alt="" className="w-6 h-6 rounded-full" />
+        ) : (
+          <i className="bx bx-user text-4xl" />
+        )
       ) : (
         <i className="bx bx-home-alt text-xl" />
       )}
