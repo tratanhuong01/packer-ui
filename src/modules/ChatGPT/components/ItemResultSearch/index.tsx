@@ -117,7 +117,44 @@ const ItemResultSearch = ({
                 <i className="bx bx-pencil text-xl"></i>
                 <span className="text-sm">Rename</span>
               </div>
-              <div className={`p-2 flex items-center gap-2 hover:bg-gray-100`}>
+              <div
+                onClick={async () => {
+                  let temp = { ...history };
+                  temp.messages = temp.messages?.map((item) => {
+                    item.list = (item.list || []).map((val) => {
+                      val.contentSearch = val.contentSearch || "";
+                      return val;
+                    });
+                    return item;
+                  });
+                  await saveHistory({
+                    history: {
+                      ...temp,
+                      isArchive: true,
+                      timeSaved: new Date(),
+                    },
+                    userId: "packer-tra",
+                  });
+                  dispatch(
+                    updateData({
+                      key: "current",
+                      value: null,
+                    })
+                  );
+                  dispatch(
+                    updateData({
+                      key: "historyList",
+                      value: [...historyList].map((val) => {
+                        if (val.id === history.id) {
+                          val.isArchive = !val.isArchive;
+                        }
+                        return val;
+                      }),
+                    })
+                  );
+                }}
+                className={`p-2 flex items-center gap-2 hover:bg-gray-100`}
+              >
                 <i className="bx bxs-hand text-xl"></i>
                 <span className="text-sm">Archive</span>
               </div>
@@ -127,6 +164,7 @@ const ItemResultSearch = ({
                     <ModalDelete
                       closeModal={() => setModal("")}
                       handleDelete={handleRemove}
+                      history={history}
                     />
                   )
                 }

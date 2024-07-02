@@ -16,6 +16,8 @@ interface HistoryProps {
   id: string;
   name: string;
   messages: MessageChildProps[];
+  isArchive: boolean;
+  timeSaved: string;
 }
 
 interface MessageChildProps {

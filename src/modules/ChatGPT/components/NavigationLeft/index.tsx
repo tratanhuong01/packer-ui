@@ -44,35 +44,37 @@ const NavigationLeft = () => {
       <div className="flex flex-col flex-1">
         <div className="flex-1 pt-8 flex flex-col gap-1">
           <p className="text-xs font-bold mb-2 text-gray-500">Today</p>
-          {historyList.map((item) => (
-            <ItemResultSearch
-              key={item.id}
-              history={item}
-              handleRemove={async () => {
-                await fetch(
-                  `${process.env.REACT_APP_BASE_URL}/api/chat-gpt/history/delete?userId=packer-tra&historyId=${item.id}`,
-                  {
-                    method: "DELETE",
+          {historyList
+            .filter((item) => !item.isArchive)
+            .map((item) => (
+              <ItemResultSearch
+                key={item.id}
+                history={item}
+                handleRemove={async () => {
+                  await fetch(
+                    `${process.env.REACT_APP_BASE_URL}/api/chat-gpt/history/delete?userId=packer-tra&historyId=${item.id}`,
+                    {
+                      method: "DELETE",
+                    }
+                  ).then((res) => res.json());
+                  dispatch(
+                    updateData({
+                      key: "current",
+                      value: current?.id === item.id ? null : current,
+                    })
+                  );
+                  dispatch(
+                    updateData({
+                      key: "historyList",
+                      value: historyList.filter((val) => item.id !== val.id),
+                    })
+                  );
+                  if (item.id === current?.id) {
+                    navigate(`/chat-gpt`);
                   }
-                ).then((res) => res.json());
-                dispatch(
-                  updateData({
-                    key: "current",
-                    value: current?.id === item.id ? null : current,
-                  })
-                );
-                dispatch(
-                  updateData({
-                    key: "historyList",
-                    value: historyList.filter((val) => item.id !== val.id),
-                  })
-                );
-                if (item.id === current?.id) {
-                  navigate(`/chat-gpt`);
-                }
-              }}
-            />
-          ))}
+                }}
+              />
+            ))}
         </div>
         <div className="">
           {isAuthenticated ? (
@@ -101,6 +103,7 @@ const NavigationLeft = () => {
               </Button>
               <Button
                 onClick={() => {
+                  dispatch(updateData({ key: "current", value: null }));
                   loginWithPopup();
                 }}
                 mode="outlined"

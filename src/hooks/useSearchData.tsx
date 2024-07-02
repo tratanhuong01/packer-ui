@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { ChatGPTContext } from "../contexts/ChatGPTContext/ChatGPTContext";
 import {
   HistoryProps,
@@ -13,17 +13,16 @@ type SearchDataResponse = {
   current: HistoryProps | null;
   isDone: string[];
   isRendering: boolean;
+  value: string;
+  setValue: Function;
 };
 
 type SearchDataProps = {
-  value: string;
   callback?: Function;
 };
 
-const useSearchData = ({
-  value,
-  callback,
-}: SearchDataProps): SearchDataResponse => {
+const useSearchData = ({ callback }: SearchDataProps): SearchDataResponse => {
+  const [value, setValue] = useState("");
   const {
     app: { current, historyList, isDone, isRendering, pendingResponse },
     dispatch,
@@ -33,7 +32,10 @@ const useSearchData = ({
   const navigate = useNavigate();
   const handleClick = (type: "stop" | "start") => {
     dispatch(
-      updateData({ key: "isRendering", value: type === "stop" ? false : true })
+      updateData({
+        key: "isRendering",
+        value: type === "stop" ? false : value ? true : false,
+      })
     );
     if (type === "stop") {
       dispatch(
@@ -46,6 +48,8 @@ const useSearchData = ({
       );
       return;
     }
+
+    if (isRendering || !value) return;
     const chatGPT: MessageChildProps = {
       id: generateUUID(),
       list: [
@@ -91,6 +95,8 @@ const useSearchData = ({
         id: generateUUID(),
         name: generateUUID(),
         messages: dataPush,
+        timeSaved: "",
+        isArchive: false,
       };
 
       newHistoryList = [...newHistoryList, newCurrent];
@@ -121,7 +127,7 @@ const useSearchData = ({
     callback && callback();
   };
 
-  return { handleClick, current, isDone, isRendering };
+  return { handleClick, current, isDone, isRendering, value, setValue };
 };
 
 export default useSearchData;

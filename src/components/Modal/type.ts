@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import ButtonProps from "../Button/type";
 
 type ItemFooterButtonProps = {
   id?: number;
@@ -15,6 +16,7 @@ type ItemFooterButtonProps = {
     | "outlined"
     | "gray"
     | "delete";
+  props?: ButtonProps;
 };
 
 type ModalProps = {

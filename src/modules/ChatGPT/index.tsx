@@ -28,7 +28,9 @@ const WrapperChatGPT = () => {
         `${process.env.REACT_APP_BASE_URL}/api/chat-gpt/history/get?id=packer-tra`
       ).then((res) => res.json());
       dispatch(updateData({ key: "historyList", value: result }));
-      setFetching(false);
+      if (user) {
+        setFetching(false);
+      }
     };
     user ? fetchData() : setFetching(false);
 
@@ -46,10 +48,15 @@ const WrapperChatGPT = () => {
         user && setFetching(false);
       };
       if (current?.id !== historyId) fetchData();
-      else setGetting(false);
+      else {
+        if (user) {
+          setGetting(false);
+        }
+      }
     } else {
       setGetting(false);
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [historyId, user]);
   const { isLoading } = useAuth0();

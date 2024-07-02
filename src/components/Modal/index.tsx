@@ -114,6 +114,7 @@ const Modal = ({
                           }
                           disabled={item.disabled}
                           loading={item.loading}
+                          {...(item.props || {})}
                         >
                           {item.name}
                         </Button>

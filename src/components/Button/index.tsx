@@ -20,6 +20,7 @@ const Button = (
     disabled,
     rounded,
   } = props;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isLoading, setIsLoading] = useState(loading);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const ref = useRef<HTMLButtonElement>(null);
@@ -42,7 +43,7 @@ const Button = (
   };
   const handleClickOverride = async (e: any) => {
     setModeCurrent("disabled");
-    setIsLoading(!isLoading);
+    setIsLoading(true);
     if (typeof handleClick === "string") {
       // eslint-disable-next-line no-new-func
       const func = new Function(handleClick);
@@ -82,7 +83,7 @@ const Button = (
       } px-4 ${generateClassMode()} ${
         !mode ? "text-button" : ""
       } disabled:bg-gray-600 disabled:hover:bg-gray-500 disabled:text-white disabled:cursor-not-allowed flex 
-      items-center justify-center text-base ${className} disabled:border-gray-500`}
+      items-center justify-center ${className} disabled:border-gray-500`}
       style={
         loading
           ? { width: 48, height: 48 }
@@ -98,16 +99,19 @@ const Button = (
       }
       disabled={mode === "disabled" || disabled}
     >
-      {isLoading && mode !== "text" ? (
-        <i className="bx bx-loader-circle loader text-2xl"></i>
-      ) : icon ? (
-        <div className="flex items-center gap-2.5">
-          <span className={icon}></span>
-          <span className="text-base">{children}</span>
-        </div>
-      ) : (
-        children
-      )}
+      {
+        // isLoading && mode !== "text" ? (
+        //   <i className="bx bx-loader-circle loader"></i>
+        // ) :
+        icon ? (
+          <div className="flex items-center gap-2.5">
+            <span className={icon}></span>
+            <span className="">{children}</span>
+          </div>
+        ) : (
+          children
+        )
+      }
       {ping && (
         <span className="absolute -top-1.5 -right-1.5 flex h-3 w-3">
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
