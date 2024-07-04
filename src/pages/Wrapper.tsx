@@ -65,7 +65,7 @@ const Wrapper = ({ children, notFound, hideContentRight }: WrapperProps) => {
           <div className="flex-1 p-2 h-full overflow-y-scroll">
             {component?.component}
           </div>
-          {!component?.isFull && <div className="w-80"></div>}
+          {/* {!component?.isFull && <div className="w-60"></div>} */}
           <div id="children-modal-root"></div>
         </div>
       </Parent>

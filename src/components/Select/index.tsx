@@ -20,7 +20,7 @@ const Select = ({ options, handleSelect }: SelectProps) => {
       }
     >
       <div
-        className="flex items-center gap-3 w-auto relative border-2 border-solid border-gray-200 
+        className="w-full flex items-center gap-3 w-auto relative border-2 border-solid border-gray-200 
         p-2.5 cursor-pointer hover:bg-gray-100 focus-within:border-red-500"
       >
         <span className="text-gray-600">Columns</span>

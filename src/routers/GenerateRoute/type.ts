@@ -9,7 +9,7 @@ export type ItemGenerateRoute = {
 export type ItemGenerateChild = {
   id: number;
   name: string;
-  type: "component" | "app" | "doc";
-  component: ReactNode | any;
+  type: "component" | "app" | "doc" | "link";
+  component?: ReactNode | any;
   isFull?: boolean;
 };

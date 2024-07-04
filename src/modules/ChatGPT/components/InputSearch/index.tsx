@@ -1,51 +1,72 @@
-import { ChangeEvent, KeyboardEvent } from "react";
+import { ChangeEvent, KeyboardEvent, useState } from "react";
 import Box from "../../../../components/Box";
 import useSearchData from "../../../../hooks/useSearchData";
 import Button from "../../../../components/Button";
+import { saveHistory } from "../../api";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const InputSearch = ({ scrollTop }: { scrollTop: Function }) => {
   //
 
-  const { handleClick, current, isRendering, value, setValue } = useSearchData({
+  const {
+    handleClick,
+    current,
+    isRendering,
+    historyList,
+    value,
+    setValue,
+    dispatch,
+    updateData,
+  } = useSearchData({
     callback: () => {
       setValue("");
       scrollTop();
     },
   });
+  const { user } = useAuth0();
+  const [loading, setLoading] = useState(false);
   const handleKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       handleClick("start");
     }
   };
-
+  const handleUnArchive = async () => {
+    if (!current) return;
+    setLoading(true);
+    let temp = { ...current };
+    temp.messages = temp.messages?.map((item) => {
+      item.list = (item.list || []).map((val) => {
+        val.contentSearch = val.contentSearch || "";
+        return val;
+      });
+      return item;
+    });
+    let history = {
+      ...temp,
+      isArchive: !temp.isArchive,
+      timeSaved: new Date(),
+    };
+    await saveHistory({
+      history,
+      userId: (user?.nickname || "").replaceAll(".", "-"),
+    });
+    dispatch(updateData({ key: "current", value: history }));
+    dispatch(
+      updateData({
+        key: "historyList",
+        value: [...historyList].map((val) => {
+          if (val.id === current?.id) {
+            val.isArchive = !val.isArchive;
+          }
+          return val;
+        }),
+      })
+    );
+    setLoading(false);
+  };
   //
   return (
     <div className="w-full">
-      {!current && (
-        <div
-          className="grid gap-1.5 mb-5"
-          style={{ gridTemplateColumns: "1fr 1fr" }}
-        >
-          {[1, 2, 3, 4].map((item) => (
-            <div
-              key={item}
-              className="p-2.5 rounded-lg border border-gray-300 border-solid cursor-pointer relative 
-            hover:bg-gray-100"
-            >
-              <Box
-                width={25}
-                height={25}
-                className="rounded-lg absolute top-1/2 transform-y-center right-3 bg-white border border-solid 
-              border-gray-200 text-gray-500 text-xl"
-              >
-                <i className="bx bx-up-arrow-alt" />
-              </Box>
-              <p className="font-semibold text-sm">Create a content calendar</p>
-              <p className="text-xs text-gray-400">for a TikTok account</p>
-            </div>
-          ))}
-        </div>
-      )}
       {current?.isArchive ? (
         <div className="w-full relative py-3 text-center">
           <p className="text-gray-500 text-center text-sm py-2">
@@ -53,9 +74,11 @@ const InputSearch = ({ scrollTop }: { scrollTop: Function }) => {
             first.
           </p>
           <Button
+            onClick={handleUnArchive}
             className="bg-black text-white mx-auto text-sm font-semibold"
             icon="bx bx-archive-in"
             rounded="full"
+            loading={loading}
           >
             Unarchive
           </Button>

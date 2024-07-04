@@ -31,7 +31,13 @@ const ItemLeftNavigation = ({
           .sort((a, b) => (a.name > b.name ? 1 : a.name < b.name ? -1 : 0))
           .map((item) => (
             <div
-              onClick={() => navigate(routeFull(parent, item.name))}
+              onClick={() => {
+                if (item.type === "link") {
+                  navigate(item.component);
+                } else {
+                  navigate(routeFull(parent, item.name));
+                }
+              }}
               key={item.id}
               className="flex gap-3 hover:bg-gray-100 cursor-pointer"
             >

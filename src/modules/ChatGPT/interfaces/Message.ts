@@ -9,7 +9,7 @@ interface MessageProps {
 interface TextProps {
   id: string;
   content: string;
-  type: "text" | "code";
+  type: "text" | "code" | string;
 }
 
 interface HistoryProps {

@@ -38,7 +38,7 @@ const LeftNavigation = ({
   //
   return (
     <div
-      className={`w-full z-0 lg:w-80 fixed lg:static top-0 left-0 bg-opacity-50 bg-black lg:bg-opacity-100 lg:bg-transparent 
+      className={`w-full z-0 lg:w-60 fixed lg:static top-0 left-0 bg-opacity-50 bg-black lg:bg-opacity-100 lg:bg-transparent 
       h-screen lg:h-full overflow-y-hidden ${
         menuActive ? "block" : "hidden lg:block"
       }`}

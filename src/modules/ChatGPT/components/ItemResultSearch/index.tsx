@@ -8,6 +8,7 @@ import ModalDelete from "../../modals/ModalDelete";
 import { updateData } from "../../../../contexts/ChatGPTContext/Actions";
 import { useNavigate } from "react-router-dom";
 import { saveHistory } from "../../api";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const ItemResultSearch = ({
   history,
@@ -24,6 +25,7 @@ const ItemResultSearch = ({
   const [value, setValue] = useState(history.name);
   const refValue = useRef(value);
   const navigate = useNavigate();
+  const { user } = useAuth0();
   const {
     app: { current, historyList },
     dispatch,
@@ -42,7 +44,7 @@ const ItemResultSearch = ({
     });
     await saveHistory({
       history: { ...temp, name: value },
-      userId: "packer-tra",
+      userId: (user?.nickname || "").replaceAll(".", "-"),
     });
     dispatch(updateData({ key: "current", value: { ...temp, name: value } }));
     dispatch(
@@ -103,7 +105,12 @@ const ItemResultSearch = ({
             <div className="w-32 p-2">
               <div
                 onClick={() =>
-                  setModal(<ModalShare closeModal={() => setModal("")} />)
+                  setModal(
+                    <ModalShare
+                      closeModal={() => setModal("")}
+                      historyId={history.id}
+                    />
+                  )
                 }
                 className={`p-2 flex items-center gap-2 hover:bg-gray-100`}
               >
@@ -119,6 +126,7 @@ const ItemResultSearch = ({
               </div>
               <div
                 onClick={async () => {
+                  setLoading(true);
                   let temp = { ...history };
                   temp.messages = temp.messages?.map((item) => {
                     item.list = (item.list || []).map((val) => {
@@ -127,31 +135,37 @@ const ItemResultSearch = ({
                     });
                     return item;
                   });
+                  const date = new Date();
                   await saveHistory({
                     history: {
                       ...temp,
                       isArchive: true,
-                      timeSaved: new Date(),
+                      timeSaved: date,
                     },
-                    userId: "packer-tra",
+                    userId: (user?.nickname || "").replaceAll(".", "-"),
                   });
-                  dispatch(
-                    updateData({
-                      key: "current",
-                      value: null,
-                    })
-                  );
                   dispatch(
                     updateData({
                       key: "historyList",
                       value: [...historyList].map((val) => {
                         if (val.id === history.id) {
                           val.isArchive = !val.isArchive;
+                          val.timeSaved = date.toString();
                         }
                         return val;
                       }),
                     })
                   );
+                  setLoading(false);
+                  if (current?.id === history.id) {
+                    dispatch(
+                      updateData({
+                        key: "current",
+                        value: null,
+                      })
+                    );
+                    navigate(`/chat-gpt`);
+                  }
                 }}
                 className={`p-2 flex items-center gap-2 hover:bg-gray-100`}
               >

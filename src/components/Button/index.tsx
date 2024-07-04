@@ -24,6 +24,7 @@ const Button = (
   const [isLoading, setIsLoading] = useState(loading);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const ref = useRef<HTMLButtonElement>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [modeCurrent, setModeCurrent] = useState(mode);
   const generateClassMode = (): string => {
     switch (modeCurrent) {
@@ -38,11 +39,10 @@ const Button = (
       case "contained":
         return `border border-solid border-primary bg-primary hover:bg-primary text-white`;
       default:
-        return `border-none ${className || "text-primary"}`;
+        return `${className || "text-primary"}`;
     }
   };
   const handleClickOverride = async (e: any) => {
-    setModeCurrent("disabled");
     setIsLoading(true);
     if (typeof handleClick === "string") {
       // eslint-disable-next-line no-new-func
@@ -52,7 +52,6 @@ const Button = (
     typeof handleClick === "function" && (await handleClick());
     typeof props.onClick === "function" && (await props.onClick(e));
     setIsLoading(false);
-    setModeCurrent(mode);
   };
   const customProps = () => {
     let temp = { ...props };
@@ -78,40 +77,29 @@ const Button = (
       type={type || "button"}
       ref={ref}
       onClick={handleClickOverride}
-      className={`py-2 relative transition whitespace-nowrap ${
+      className={`relative transition whitespace-nowrap ${
         rounded ? `rounded-${rounded}` : "rounded-lg"
       } px-4 ${generateClassMode()} ${
         !mode ? "text-button" : ""
       } disabled:bg-gray-600 disabled:hover:bg-gray-500 disabled:text-white disabled:cursor-not-allowed flex 
       items-center justify-center ${className} disabled:border-gray-500`}
-      style={
-        loading
-          ? { width: 48, height: 48 }
-          : {
-              width:
-                typeof width === "string"
-                  ? width
-                  : width
-                  ? `${width}px`
-                  : "auto",
-              height: height ? `${height}px` : "auto",
-            }
-      }
+      style={{
+        width:
+          typeof width === "string" ? width : width ? `${width}px` : "auto",
+        height: height ? `${height}px` : 36,
+      }}
       disabled={mode === "disabled" || disabled}
     >
-      {
-        // isLoading && mode !== "text" ? (
-        //   <i className="bx bx-loader-circle loader"></i>
-        // ) :
-        icon ? (
-          <div className="flex items-center gap-2.5">
-            <span className={icon}></span>
-            <span className="">{children}</span>
-          </div>
-        ) : (
-          children
-        )
-      }
+      {isLoading && mode !== "text" ? (
+        <i className="bx bx-loader-circle text-white animate-spin text-xl"></i>
+      ) : icon ? (
+        <div className="flex items-center gap-2.5">
+          <span className={icon}></span>
+          <span className="">{children}</span>
+        </div>
+      ) : (
+        children
+      )}
       {ping && (
         <span className="absolute -top-1.5 -right-1.5 flex h-3 w-3">
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>

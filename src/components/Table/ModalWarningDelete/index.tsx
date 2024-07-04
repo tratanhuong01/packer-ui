@@ -12,7 +12,7 @@ const ModalWarningDelete = ({
   deleteAPI?: (ids: number[]) => void;
 }) => {
   const {
-    custom: { selected, length, list, index },
+    custom: { selected, length, list, index, loadingModal },
     dispatch,
     actions: { updateData },
   } = useContext(TableContext);
@@ -57,6 +57,7 @@ const ModalWarningDelete = ({
           id: Math.random(),
         },
       ]}
+      loading={loadingModal}
     >
       Do you want delete all selected.
     </Modal>

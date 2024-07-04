@@ -1,3 +1,4 @@
+import TransferList from "../../../components/TransferList";
 import VideoMedia from "../../../components/VideoMedia";
 import LibraryManager from "../../../pages/LibraryManage";
 import AutoCompletePage from "../../../pages/components/AutoComplete";
@@ -57,7 +58,7 @@ const transferList: ItemGenerateChild = {
   id: Math.random(),
   name: "Transfer List",
   type: "app",
-  component: <p>Transfer List</p>,
+  component: <TransferList items={[]} />,
 };
 const pagination: ItemGenerateChild = {
   id: Math.random(),

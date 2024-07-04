@@ -6,6 +6,8 @@ import { HistoryProps } from "../../interfaces/Message";
 import { saveHistory } from "../../api";
 import { useNavigate } from "react-router-dom";
 import ModalDelete from "../ModalDelete";
+import { formatDate } from "../../utils";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const ModalArchivedChat = ({ closeModal }: { closeModal: Function }) => {
   //
@@ -14,6 +16,7 @@ const ModalArchivedChat = ({ closeModal }: { closeModal: Function }) => {
     dispatch,
   } = useContext(ChatGPTContext);
   const [loading, setLoading] = useState(false);
+  const { user } = useAuth0();
   const handleUnArchive = async (history: HistoryProps) => {
     if (loading) return;
 
@@ -32,7 +35,7 @@ const ModalArchivedChat = ({ closeModal }: { closeModal: Function }) => {
         isArchive: !temp.isArchive,
         timeSaved: new Date(),
       },
-      userId: "packer-tra",
+      userId: (user?.nickname || "").replaceAll(".", "-"),
     });
     dispatch(
       updateData({
@@ -82,7 +85,9 @@ const ModalArchivedChat = ({ closeModal }: { closeModal: Function }) => {
                   <span className="bx bx-comment"></span>
                   <span className="flex-1">{item.name}</span>
                 </div>
-                <div className="w-48 text-gray-500">{item.timeSaved}</div>
+                <div className="w-48 text-gray-500">
+                  {formatDate(new Date(item.timeSaved))}
+                </div>
                 <div className="px-5 flex gap-2 text-gray-400 items-center w-16">
                   <i
                     onClick={() => handleUnArchive(item)}
@@ -96,7 +101,11 @@ const ModalArchivedChat = ({ closeModal }: { closeModal: Function }) => {
                           closeModal={() => setModal("")}
                           handleDelete={async () => {
                             await fetch(
-                              `${process.env.REACT_APP_BASE_URL}/api/chat-gpt/history/delete?userId=packer-tra&historyId=${item.id}`,
+                              `${
+                                process.env.REACT_APP_BASE_URL
+                              }/api/chat-gpt/history/delete?userId=${(
+                                user?.nickname || ""
+                              ).replaceAll(".", "-")}&historyId=${item.id}`,
                               {
                                 method: "DELETE",
                               }

@@ -1,14 +1,19 @@
 import "./index.scss";
 
-const Loading = ({ container }: { container?: boolean }) => {
+const Loading = ({
+  container,
+  overlay,
+}: {
+  container?: boolean;
+  overlay?: boolean;
+}) => {
   return container ? (
-    <div className="w-full h-full flex items-center justify-center">
-      <div>
-        <Loading />
-        <div className="flex items-center gap-2 text-sm text-primary">
-          <span>Checking image or video affect...</span>
-        </div>
-      </div>
+    <div
+      className={`absolute top-0 left-0 z-50 right-0 bottom-0 top-0 flex items-center justify-center ${
+        overlay ? "bg-white bg-opacity-50" : ""
+      }`}
+    >
+      <div className="loader"></div>;
     </div>
   ) : (
     <div className="w-full flex items-center justify-center py-5">

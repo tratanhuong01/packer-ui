@@ -1,11 +1,12 @@
 import { TextProps } from "../../interfaces/Message";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { ChatGPTContext } from "../../../../contexts/ChatGPTContext/ChatGPTContext";
 import TaskbarText from "./TaskbarText";
 import CodeResult from "./CodeResult";
 import { ContentSearchProps } from "./type";
 import { saveHistory } from "../../api";
 import { useAuth0 } from "@auth0/auth0-react";
+import EditMessage from "./EditMessage";
 const ContentSearch = ({
   messages,
   scrollTop,
@@ -22,6 +23,8 @@ const ContentSearch = ({
   const [data, setData] = useState<TextProps[]>([]);
   const [time, setTime] = useState(0);
   const [index, setIndex] = useState(0);
+  const [edit, setEdit] = useState(false);
+  const ref = useRef<any>();
   let timeOut: any;
   const callback = async () => {
     if (time === message.content[index].content.length) {
@@ -46,7 +49,7 @@ const ContentSearch = ({
         if (user) {
           await saveHistory({
             history: temp,
-            userId: "packer-tra",
+            userId: (user?.nickname || "").replaceAll(".", "-"),
           });
         }
         clearTimeout(timeOut);
@@ -80,65 +83,108 @@ const ContentSearch = ({
   }, [messages.index, messages.isLoading]);
   //
   return (
-    <div className="flex items-start gap-5 w-full pb-8">
+    <div
+      className={`flex ${
+        message.type === "user" ? "flex-wrap" : ""
+      } items-start gap-5 w-full pb-8`}
+    >
       {message.type === "user" ? (
-        user ? (
-          <img src={user?.picture} alt="" className="w-6 h-6 rounded-full" />
-        ) : (
-          <i className="bx bx-user text-4xl" />
+        //  (
+        //   user ? (
+        //     <img src={user?.picture} alt="" className="w-6 h-6 rounded-full" />
+        //   ) : (
+        //     <i className="bx bx-user text-4xl" />
+        //   )
+        // )
+        !edit && (
+          <div className="flex-1 flex mt-1 justify-end">
+            {message.type === "user" && (
+              <span
+                onClick={() => setEdit(true)}
+                className="bx bx-pencil ml-auto text-gray-500 hover:bg-gray-100 rounded-full w-8 h-8 flex 
+                cursor-pointer transition-all justify-center items-center"
+              ></span>
+            )}
+          </div>
         )
       ) : (
         <i className="bx bx-home-alt text-xl" />
       )}
-      <div className="relative">
-        <p className="font-bold mb-0.5 text-sm">
-          {message.type === "user" ? "You" : "ChatPUI"}
-        </p>
-        {!messages.isLoading &&
-          message.content.map(
-            (item, index) =>
-              index + 1 <= data.length &&
-              (item.type === "text" ? (
+      {!edit ? (
+        <>
+          <div
+            className={`relative ${
+              message.type === "user"
+                ? "px-4 py-2 rounded-full bg-gray-200 ml-auto w-auto"
+                : "w-full"
+            }`}
+          >
+            {message.type !== "user" && (
+              <p className="font-bold mb-0.5 text-sm">ChatPUI</p>
+            )}
+            {!messages.isLoading &&
+              message.content.map(
+                (item, index) =>
+                  index + 1 <= data.length &&
+                  (item.type === "text" ? (
+                    <p
+                      key={item.id}
+                      dangerouslySetInnerHTML={{
+                        __html: item.content,
+                      }}
+                    ></p>
+                  ) : (
+                    <CodeResult key={item.id} content={item.content} />
+                  ))
+              )}
+            {messages.isLoading ? (
+              <div>
+                <span className="bx bx-loader-alt animate-spin text-green-500"></span>
+              </div>
+            ) : (
+              message.type === "chatgpt" &&
+              (message.content[index].type === "text" ? (
                 <p
-                  key={item.id}
                   dangerouslySetInnerHTML={{
-                    __html: item.content,
+                    __html: message.content[index].content.slice(0, time),
                   }}
                 ></p>
               ) : (
-                <CodeResult key={item.id} content={item.content} />
+                <CodeResult
+                  content={message.content[index].content.slice(0, time)}
+                />
               ))
-          )}
-        {messages.isLoading ? (
-          <div>
-            <span className="bx bx-loader-alt animate-spin text-green-500"></span>
+            )}
+            {message.type === "chatgpt" &&
+              (message.content.length === data.length + 1 ||
+                message.content.length === data.length) && (
+                <TaskbarText
+                  content={messages.list[messages.index].content
+                    .map((item) => item.content)
+                    .join(" ")}
+                  fetchData={fetchData}
+                  messages={messages}
+                />
+              )}
           </div>
-        ) : (
-          message.type === "chatgpt" &&
-          (message.content[index].type === "text" ? (
-            <p
-              dangerouslySetInnerHTML={{
-                __html: message.content[index].content.slice(0, time),
-              }}
-            ></p>
-          ) : (
-            <CodeResult
-              content={message.content[index].content.slice(0, time)}
-            />
-          ))
-        )}
-        {message.type === "chatgpt" &&
-          (message.content.length === data.length + 1 ||
-            message.content.length === data.length) && (
-            <TaskbarText
-              content={messages.list[messages.index].content
-                .map((item) => item.content)
-                .join(" ")}
-              fetchData={fetchData}
-              messages={messages}
-            />
+          {message.type === "user" && (
+            <div className="w-full -mt-4 flex justify-end">
+              {
+                <TaskbarText
+                  ref={ref}
+                  content={messages.list[messages.index].content
+                    .map((item) => item.content)
+                    .join(" ")}
+                  fetchData={fetchData}
+                  messages={messages}
+                />
+              }
+            </div>
           )}
-      </div>
+        </>
+      ) : (
+        <EditMessage message={message} messages={messages} setEdit={setEdit} />
+      )}
     </div>
   );
 };

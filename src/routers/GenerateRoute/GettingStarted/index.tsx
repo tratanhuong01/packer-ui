@@ -1,4 +1,3 @@
-import ChatGPT from "../../../modules/ChatGPT";
 import Installation from "../../../modules/UI Components/pages/Installation";
 import ListComponent from "../../../modules/UI Components/pages/ListComponent";
 import Overview from "../../../modules/UI Components/pages/Overview";
@@ -8,8 +7,8 @@ import { ItemGenerateChild } from "../type";
 const chatGPT: ItemGenerateChild = {
   id: Math.random(),
   name: "Chat GPT",
-  type: "app",
-  component: <ChatGPT />,
+  type: "link",
+  component: `/chat-gpt`,
   isFull: true,
 };
 const installation: ItemGenerateChild = {
@@ -31,12 +30,6 @@ const overview: ItemGenerateChild = {
   type: "app",
   component: <Usage />,
 };
-const usage: ItemGenerateChild = {
-  id: Math.random(),
-  name: "UI Code",
-  type: "app",
-  component: <p>UI Code</p>,
-};
 const vsCode: ItemGenerateChild = {
   id: Math.random(),
   name: "Overview",
@@ -49,7 +42,6 @@ const GettingStarted: ItemGenerateChild[] = [
   installation,
   listComponent,
   overview,
-  usage,
   vsCode,
 ];
 

@@ -25,7 +25,6 @@ export default function ComboBox() {
       options={options}
       nameSearch={"label"}
       itemHandle={(item) =>
-        console.log(typeof item === "object" ? JSON.stringify(item) : item)
       }
     />
   );

@@ -9,7 +9,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import Loading from "../../components/Loading";
 import { useContext, useEffect, useState } from "react";
 import { updateData } from "../../contexts/ChatGPTContext/Actions";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const WrapperChatGPT = () => {
   //
@@ -21,11 +21,14 @@ const WrapperChatGPT = () => {
   } = useContext(ChatGPTContext);
   const { historyId } = useParams();
   const { user } = useAuth0();
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
       setFetching(true);
       const result = await fetch(
-        `${process.env.REACT_APP_BASE_URL}/api/chat-gpt/history/get?id=packer-tra`
+        `${process.env.REACT_APP_BASE_URL}/api/chat-gpt/history/get?id=${(
+          user?.nickname || ""
+        ).replaceAll(".", "-")}`
       ).then((res) => res.json());
       dispatch(updateData({ key: "historyList", value: result }));
       if (user) {
@@ -41,9 +44,15 @@ const WrapperChatGPT = () => {
       const fetchData = async () => {
         setGetting(true);
         const result = await fetch(
-          `${process.env.REACT_APP_BASE_URL}/api/chat-gpt/history?userId=packer-tra&historyId=${historyId}`
+          `${process.env.REACT_APP_BASE_URL}/api/chat-gpt/history?userId=${(
+            user?.nickname || ""
+          ).replaceAll(".", "-")}&historyId=${historyId}`
         ).then((res) => res.json());
-        dispatch(updateData({ key: "current", value: result }));
+        if (result) {
+          dispatch(updateData({ key: "current", value: result }));
+        } else {
+          navigate(`/chat-gpt`);
+        }
         setGetting(false);
         user && setFetching(false);
       };
@@ -91,7 +100,6 @@ const ChatGPT = () => {
   // useEffect(() => {
   //   const eventSource = new EventSource("http://localhost:8000/api/steam");
   //   const locationUpdate = (event: any) => {
-  //     console.log(event.data);
   //     eventSource.removeEventListener("locationUpdate", locationUpdate);
   //   };
   //   eventSource.addEventListener("locationUpdate", locationUpdate);

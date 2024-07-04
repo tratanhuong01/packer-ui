@@ -42,7 +42,7 @@ const TransferList = ({ items }: TransferListType) => {
   };
   //
   return (
-    <div style={{ width: 800 }} className="flex gap-4">
+    <div className="flex gap-4">
       <div
         className={`w-2/5 ${
           current.length === 0 ? "flex items-center justify-center" : ""

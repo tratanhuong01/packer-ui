@@ -29,9 +29,11 @@ const StartSearch = () => {
     if (!current) return;
     dispatch(updateData({ key: "isRendering", value: true }));
     const result = await fetch(
-      `${process.env.REACT_APP_BASE_URL}/v${Math.floor(
-        Math.random() * (4 - 2 + 1) + 2
-      )}/chat-gpt`,
+      `${process.env.REACT_APP_BASE_URL}/v${
+        // Math.floor(
+        // Math.random() * (4 - 2 + 1) + 2)
+        3
+      }/chat-gpt`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -111,7 +113,7 @@ const StartSearch = () => {
     <Fragment>
       <div className="absolute top-0 left-0 cursor-pointer bg-white w-full z-50 flex justify-between items-center pr-4">
         <Popover component={<PopupVersionChat />}>
-          <div className="flex items-center gap-0.5 p-4">
+          <div className="w-60 flex items-center gap-0.5 p-4">
             <span className="font-bold text-black">ChatPUI</span>
             <span className="font-semibold">3.5</span>
             <span className="bx bx-chevron-down"></span>
@@ -122,6 +124,7 @@ const StartSearch = () => {
         )}
         {isAuthenticated && (
           <Popover
+            className="w-auto"
             position="right-0 mt-2"
             component={
               <div className="w-72 p-1.5">

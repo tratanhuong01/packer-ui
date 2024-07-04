@@ -85,7 +85,10 @@ const AutoComplete = <T,>({
   return (
     <div
       ref={ref}
-      onClick={() => setShowPopup(!showPopup)}
+      onClick={() => {
+        setShowPopup(!showPopup);
+        setIsFocus(true);
+      }}
       className={`w-full p-2 my-2 border-solid ${
         isFocus ? "border border-primary" : "border border-gray-200"
       }  relative rounded-md flex items-center justify-between ${

@@ -58,7 +58,7 @@ const ListComponent = () => {
       <p className="font-bold text-4xl mb-2 mt-8">Transfer List</p>
       <ShowComponent
         component={
-          <div className="md:block hidden">
+          <div className="w-11/12 mx-auto">
             <TransferList
               items={[
                 { id: 1, name: "John Doe" },

@@ -15,6 +15,7 @@ const NavigationLeft = () => {
     dispatch,
     actions: { updateData },
   } = useContext(ChatGPTContext);
+  const { user } = useAuth0();
   const box =
     "w-10 h-10 hover:bg-gray-200 cursor-pointer text-xl flex justify-center items-center rounded-lg";
   const { loginWithPopup } = useAuth0();
@@ -52,7 +53,11 @@ const NavigationLeft = () => {
                 history={item}
                 handleRemove={async () => {
                   await fetch(
-                    `${process.env.REACT_APP_BASE_URL}/api/chat-gpt/history/delete?userId=packer-tra&historyId=${item.id}`,
+                    `${
+                      process.env.REACT_APP_BASE_URL
+                    }/api/chat-gpt/history/delete?userId=${(
+                      user?.nickname || ""
+                    ).replaceAll(".", "-")}&historyId=${item.id}`,
                     {
                       method: "DELETE",
                     }

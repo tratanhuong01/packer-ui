@@ -5,16 +5,16 @@ const convertHTMLString = (str: string): TextProps[] => {
     .substring(1, str.length - 1)
     .split("```")
     .map((item): TextProps => {
-      let isCode = false;
+      let isCode = "";
 
-      if (item.indexOf("javascript\\n") !== -1) isCode = true;
-      if (item.indexOf("typescript\\n") !== -1) isCode = true;
-      if (item.indexOf("java\\n") !== -1) isCode = true;
-      if (item.indexOf("csharp\\n") !== -1) isCode = true;
-      if (item.indexOf("cpp\\n") !== -1) isCode = true;
-      if (item.indexOf("python\\n") !== -1) isCode = true;
-      if (item.indexOf("nodejs\\n") !== -1) isCode = true;
-      if (item.indexOf("php\\n") !== -1) isCode = true;
+      if (item.indexOf("javascript\\n") !== -1) isCode = "javascript";
+      if (item.indexOf("typescript\\n") !== -1) isCode = "typescript";
+      if (item.indexOf("java\\n") !== -1) isCode = "java";
+      if (item.indexOf("csharp\\n") !== -1) isCode = "csharp";
+      if (item.indexOf("cpp\\n") !== -1) isCode = "cpp";
+      if (item.indexOf("python\\n") !== -1) isCode = "python";
+      if (item.indexOf("nodejs\\n") !== -1) isCode = "nodejs";
+      if (item.indexOf("php\\n") !== -1) isCode = "php";
 
       if (!isCode) {
         return {
@@ -41,7 +41,7 @@ const convertHTMLString = (str: string): TextProps[] => {
             .replaceAll("nodejs", "")
             .replaceAll("php", ""),
           // .replaceAll("\\", ""),
-          type: "code",
+          type: isCode,
         };
       }
     });
@@ -53,4 +53,16 @@ const generateUUID = () => {
     return v.toString(16);
   });
 };
-export { convertHTMLString, generateUUID };
+
+const formatDate = (date: Date) => {
+  let day = String(date.getDate()).padStart(2, "0");
+  let month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-based
+  let year = date.getFullYear();
+  let hours = String(date.getHours()).padStart(2, "0");
+  let minutes = String(date.getMinutes()).padStart(2, "0");
+  let seconds = String(date.getSeconds()).padStart(2, "0");
+
+  return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+};
+
+export { convertHTMLString, generateUUID, formatDate };

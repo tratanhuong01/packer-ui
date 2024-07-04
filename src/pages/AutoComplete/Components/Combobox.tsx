@@ -16,9 +16,7 @@ export default function ComboBox() {
     <AutoComplete
       options={options}
       nameSearch={"label"}
-      itemHandle={(item) =>
-        console.log(typeof item === "object" ? JSON.stringify(item) : item)
-      }
+      itemHandle={(item) => ""}
     />
   );
 }

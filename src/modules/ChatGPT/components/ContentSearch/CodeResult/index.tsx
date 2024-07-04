@@ -20,7 +20,7 @@ const CodeResult = ({ content }: { content: string }) => {
       </div>
       <div>
         <ReactSyntaxHighlighter
-          language="java"
+          language="Javascript"
           wrapLines={true}
           wrapLongLines={true}
           style={monokaiSublime}

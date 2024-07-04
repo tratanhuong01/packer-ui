@@ -3,6 +3,7 @@ import Button from "../../../../components/Button";
 import Modal from "../../../../components/Modal";
 import { ChatGPTContext } from "../../../../contexts/ChatGPTContext/ChatGPTContext";
 import { updateData } from "../../../../contexts/ChatGPTContext/Actions";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const ModalConfirmArchivedChat = ({ closeModal }: { closeModal: Function }) => {
   //
@@ -11,6 +12,7 @@ const ModalConfirmArchivedChat = ({ closeModal }: { closeModal: Function }) => {
     app: { historyList },
     dispatch,
   } = useContext(ChatGPTContext);
+  const { user } = useAuth0();
   //
   return (
     <Modal closeModal={closeModal} noAnimate loading={loading}>
@@ -27,7 +29,9 @@ const ModalConfirmArchivedChat = ({ closeModal }: { closeModal: Function }) => {
             await fetch(
               `${
                 process.env.REACT_APP_BASE_URL
-              }/api/chat-gpt/history/list?userId=${"packer-tra"}`,
+              }/api/chat-gpt/history/list?userId=${(
+                user?.nickname || ""
+              ).replaceAll(".", "-")}`,
               {
                 method: "PUT",
                 headers: {
@@ -41,7 +45,7 @@ const ModalConfirmArchivedChat = ({ closeModal }: { closeModal: Function }) => {
                 value: historyList.map((item) => {
                   return {
                     ...item,
-                    isArchive: !item.isArchive,
+                    isArchive: true,
                     timeSaved: new Date().toString(),
                   };
                 }),

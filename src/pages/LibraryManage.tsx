@@ -65,6 +65,7 @@ const ItemLibrary = ({
 
 const LibraryManager = () => {
   //
+  const [loading, setLoading] = useState(true);
   const [show, setShow] = useState(false);
   const [images, setImages] = useState<any[]>([]);
   const [selected, setSelected] = useState<number[]>([]);
@@ -74,6 +75,7 @@ const LibraryManager = () => {
         "https://picsum.photos/v2/list?page=4&limit=12"
       ).then((res) => res.json());
       setImages(result);
+      setLoading(false);
     };
     fetchData();
   }, []);
@@ -93,16 +95,19 @@ const LibraryManager = () => {
         <Button mode="outlined">Download</Button>
       </div>
       <div className="w-full py-8 grid gap-4 grid-cols-4">
-        {images.map((item) => (
-          <ItemLibrary
-            item={item}
-            selected={selected}
-            setSelected={setSelected}
-            key={item.id}
-          />
-        ))}
+        {loading ? (
+          <Loading container />
+        ) : (
+          images.map((item) => (
+            <ItemLibrary
+              item={item}
+              selected={selected}
+              setSelected={setSelected}
+              key={item.id}
+            />
+          ))
+        )}
       </div>
-      {false && <Modal mode="panel" headerTitle="Panel"></Modal>}
       {show && <ModalDelete closeModal={() => setShow(false)} />}
     </>
   );

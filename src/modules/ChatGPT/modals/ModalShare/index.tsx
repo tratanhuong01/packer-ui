@@ -3,19 +3,21 @@ import Button from "../../../../components/Button";
 import Modal from "../../../../components/Modal";
 import useCopyText from "../../../../hooks/useCopyText";
 
-const ModalShare = ({ closeModal }: { closeModal: Function }) => {
+const ModalShare = ({
+  closeModal,
+  historyId,
+}: {
+  closeModal: Function;
+  historyId: string;
+}) => {
   //
   const [success, setSuccess] = useState(false);
   const [value, setValue] = useState("");
-  const { handleClick, loading } = useCopyText(
-    "https://chatgpt.com/share/fb418923-60cc-47ed-93e9-f1e064ddb8db",
-    () => {
-      setSuccess(true);
-      setValue(
-        "https://chatgpt.com/share/fb418923-60cc-47ed-93e9-f1e064ddb8db"
-      );
-    }
-  );
+  const link = `${window.location.origin}/chat-gpt/${historyId}`;
+  const { handleClick, loading } = useCopyText(link, () => {
+    setSuccess(true);
+    setValue(link);
+  });
   //
   return (
     <Modal
@@ -45,7 +47,7 @@ const ModalShare = ({ closeModal }: { closeModal: Function }) => {
           value={value}
           disabled={true}
           className="flex-1 text-gray-500"
-          placeholder="https://chatgpt.com/share/..."
+          placeholder={link}
         />
         <Button
           width={130}

@@ -8,20 +8,11 @@ import { generateUUID } from "../modules/ChatGPT/utils";
 import { useNavigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 
-type SearchDataResponse = {
-  handleClick: (type: "stop" | "start") => void;
-  current: HistoryProps | null;
-  isDone: string[];
-  isRendering: boolean;
-  value: string;
-  setValue: Function;
-};
-
 type SearchDataProps = {
   callback?: Function;
 };
 
-const useSearchData = ({ callback }: SearchDataProps): SearchDataResponse => {
+const useSearchData = ({ callback }: SearchDataProps) => {
   const [value, setValue] = useState("");
   const {
     app: { current, historyList, isDone, isRendering, pendingResponse },
@@ -127,7 +118,17 @@ const useSearchData = ({ callback }: SearchDataProps): SearchDataResponse => {
     callback && callback();
   };
 
-  return { handleClick, current, isDone, isRendering, value, setValue };
+  return {
+    handleClick,
+    current,
+    isDone,
+    isRendering,
+    historyList,
+    value,
+    setValue,
+    dispatch,
+    updateData,
+  };
 };
 
 export default useSearchData;

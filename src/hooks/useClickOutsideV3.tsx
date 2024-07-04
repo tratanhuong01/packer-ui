@@ -26,7 +26,6 @@ const useClickOutside = (props?: ClickOutsideProps) => {
     }
     if (!outside) {
       setIsOpen(false);
-      console.log("click out side");
       return;
     }
   };
