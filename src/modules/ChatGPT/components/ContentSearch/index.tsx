@@ -7,10 +7,13 @@ import { ContentSearchProps } from "./type";
 import { saveHistory } from "../../api";
 import { useAuth0 } from "@auth0/auth0-react";
 import EditMessage from "./EditMessage";
+import DOMPurify from "dompurify";
+
 const ContentSearch = ({
   messages,
   scrollTop,
   fetchData,
+  isShare,
 }: ContentSearchProps) => {
   //
   const { user } = useAuth0();
@@ -98,7 +101,7 @@ const ContentSearch = ({
         // )
         !edit && (
           <div className="flex-1 flex mt-1 justify-end">
-            {message.type === "user" && (
+            {message.type === "user" && !isShare && (
               <span
                 onClick={() => setEdit(true)}
                 className="bx bx-pencil ml-auto text-gray-500 hover:bg-gray-100 rounded-full w-8 h-8 flex 
@@ -115,7 +118,7 @@ const ContentSearch = ({
           <div
             className={`relative ${
               message.type === "user"
-                ? "px-4 py-2 rounded-full bg-gray-200 ml-auto w-auto"
+                ? "px-4 py-2 rounded-3xl bg-gray-200 ml-auto w-auto"
                 : "w-full"
             }`}
           >
@@ -129,12 +132,17 @@ const ContentSearch = ({
                   (item.type === "text" ? (
                     <p
                       key={item.id}
+                      className="whitespace-pre-wrap"
                       dangerouslySetInnerHTML={{
-                        __html: item.content,
+                        __html: DOMPurify.sanitize(item.content),
                       }}
                     ></p>
                   ) : (
-                    <CodeResult key={item.id} content={item.content} />
+                    <CodeResult
+                      key={item.id}
+                      content={item.content}
+                      type={item.type}
+                    />
                   ))
               )}
             {messages.isLoading ? (
@@ -145,17 +153,22 @@ const ContentSearch = ({
               message.type === "chatgpt" &&
               (message.content[index].type === "text" ? (
                 <p
+                  className="whitespace-pre-wrap"
                   dangerouslySetInnerHTML={{
-                    __html: message.content[index].content.slice(0, time),
+                    __html: DOMPurify.sanitize(
+                      message.content[index].content.slice(0, time)
+                    ),
                   }}
                 ></p>
               ) : (
                 <CodeResult
+                  type={message.content[index].type}
                   content={message.content[index].content.slice(0, time)}
                 />
               ))
             )}
-            {message.type === "chatgpt" &&
+            {!isShare &&
+              message.type === "chatgpt" &&
               (message.content.length === data.length + 1 ||
                 message.content.length === data.length) && (
                 <TaskbarText
@@ -183,7 +196,12 @@ const ContentSearch = ({
           )}
         </>
       ) : (
-        <EditMessage message={message} messages={messages} setEdit={setEdit} />
+        <EditMessage
+          message={message}
+          messages={messages}
+          setEdit={setEdit}
+          edit={edit}
+        />
       )}
     </div>
   );

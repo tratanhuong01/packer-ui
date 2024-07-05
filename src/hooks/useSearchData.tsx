@@ -22,6 +22,7 @@ const useSearchData = ({ callback }: SearchDataProps) => {
   const { user } = useAuth0();
   const navigate = useNavigate();
   const handleClick = (type: "stop" | "start") => {
+    if (value.length > 1000) return;
     dispatch(
       updateData({
         key: "isRendering",
@@ -39,7 +40,6 @@ const useSearchData = ({ callback }: SearchDataProps) => {
       );
       return;
     }
-
     if (isRendering || !value) return;
     const chatGPT: MessageChildProps = {
       id: generateUUID(),

@@ -7,7 +7,7 @@ import {
 } from "../../contexts/ChatGPTContext/ChatGPTContext";
 import { useAuth0 } from "@auth0/auth0-react";
 import Loading from "../../components/Loading";
-import { useContext, useEffect, useState } from "react";
+import { ReactNode, useContext, useEffect, useState } from "react";
 import { updateData } from "../../contexts/ChatGPTContext/Actions";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -96,7 +96,7 @@ const WrapperChatGPT = () => {
   );
 };
 
-const ChatGPT = () => {
+const ChatGPT = ({ children }: { children?: ReactNode }) => {
   // useEffect(() => {
   //   const eventSource = new EventSource("http://localhost:8000/api/steam");
   //   const locationUpdate = (event: any) => {
@@ -108,11 +108,7 @@ const ChatGPT = () => {
   //     eventSource.close();
   //   };
   // }, []);
-  return (
-    <ChatGPTProvider>
-      <WrapperChatGPT />
-    </ChatGPTProvider>
-  );
+  return <ChatGPTProvider>{children || <WrapperChatGPT />}</ChatGPTProvider>;
 };
 
 export default ChatGPT;

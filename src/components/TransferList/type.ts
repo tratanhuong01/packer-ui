@@ -1,5 +1,12 @@
 type TransferListType = {
-  items: any[];
+  getItems: () => Promise<
+    {
+      key: string;
+      value: string;
+      checked?: boolean;
+    }[]
+  >;
+  height?: number;
 };
 
 export default TransferListType;

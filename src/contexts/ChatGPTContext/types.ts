@@ -10,7 +10,6 @@ type StateType = {
   pendingResponse: MessageProps | null;
   isRendering: boolean;
   fullScreen: boolean;
-  user: any;
 };
 
 type StateKey = keyof StateType;

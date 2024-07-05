@@ -22,8 +22,7 @@ const initialState: StateType = {
   isDone: [],
   pendingResponse: null,
   isRendering: false,
-  fullScreen: true,
-  user: null,
+  fullScreen: false,
 };
 
 const ChatGPTContext = createContext<ContextType>({

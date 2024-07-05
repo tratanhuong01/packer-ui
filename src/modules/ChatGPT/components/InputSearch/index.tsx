@@ -1,4 +1,4 @@
-import { ChangeEvent, KeyboardEvent, useState } from "react";
+import { ChangeEvent, KeyboardEvent, useRef, useState } from "react";
 import Box from "../../../../components/Box";
 import useSearchData from "../../../../hooks/useSearchData";
 import Button from "../../../../components/Button";
@@ -21,11 +21,14 @@ const InputSearch = ({ scrollTop }: { scrollTop: Function }) => {
     callback: () => {
       setValue("");
       scrollTop();
+      followHeight(true);
     },
   });
+  const refTextarea = useRef<HTMLTextAreaElement>(null);
   const { user } = useAuth0();
   const [loading, setLoading] = useState(false);
-  const handleKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyPress = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (event.key === "Enter" && event.shiftKey) return;
     if (event.key === "Enter") {
       handleClick("start");
     }
@@ -64,6 +67,19 @@ const InputSearch = ({ scrollTop }: { scrollTop: Function }) => {
     );
     setLoading(false);
   };
+  const followHeight = (isReset?: boolean) => {
+    if (refTextarea.current) {
+      if (isReset) {
+        refTextarea.current.style.height = "";
+      } else {
+        refTextarea.current.style.height = "auto";
+        refTextarea.current.style.height =
+          refTextarea.current.scrollHeight === 45
+            ? ""
+            : refTextarea.current.scrollHeight + "px";
+      }
+    }
+  };
   //
   return (
     <div className="w-full">
@@ -85,25 +101,26 @@ const InputSearch = ({ scrollTop }: { scrollTop: Function }) => {
         </div>
       ) : (
         <>
-          <div className="w-full relative">
-            <input
-              type="text"
+          <div className="w-full relative pl-4 pr-3 py-3 gap-3 flex items-end rounded-3xl border border-gray-300 border-solid">
+            <textarea
+              ref={refTextarea}
               placeholder="Message ChatGPT..."
-              className="w-full p-3 rounded-xl border border-gray-300 border-solid"
+              className="w-full h-7 resize-none border-none max-h-60"
               value={value}
               spellCheck={false}
-              onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                setValue(event.target.value)
-              }
               onKeyUp={handleKeyPress}
+              onChange={(event: ChangeEvent<HTMLTextAreaElement>) => {
+                setValue(event.target.value);
+                followHeight();
+              }}
             />
             <Box
               handleClick={() => handleClick(!isRendering ? "start" : "stop")}
               width={32}
               height={32}
               disabled={!value && !isRendering}
-              className={`rounded-full absolute top-1/2 transform-y-center right-3 text-2xl ${
-                value ? "bg-black cursor-pointer" : ""
+              className={`rounded-full text-2xl ${
+                value && value.length <= 1000 ? "bg-black cursor-pointer" : ""
               } ${!isRendering ? "bg-gray-200" : "cursor-pointer"}`}
             >
               {!isRendering ? (

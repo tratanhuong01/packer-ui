@@ -13,8 +13,8 @@ const ItemTransferList = ({
     <div>
       {items.map((item) => (
         <label
-          htmlFor={`${type}-item-${item.id}`}
-          key={Math.random()}
+          htmlFor={`${type}-item-${item.key}`}
+          key={`${type}-item-${item.key}`}
           className="flex items-center gap-5 p-3 hover:bg-gray-200 cursor-pointer"
         >
           <input
@@ -23,10 +23,10 @@ const ItemTransferList = ({
             }}
             checked={item.checked}
             type="checkbox"
-            id={`${type}-item-${item.id}`}
+            id={`${type}-item-${item.key}`}
             className="scale-150"
           />
-          <span>{item.name}</span>
+          <span>{item.value}</span>
         </label>
       ))}
     </div>

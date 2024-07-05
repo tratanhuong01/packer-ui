@@ -1,4 +1,4 @@
-import { ChangeEvent, useContext, useRef, useState } from "react";
+import { ChangeEvent, useContext, useEffect, useRef, useState } from "react";
 import { MessageChildProps, MessageProps } from "../../../interfaces/Message";
 import Button from "../../../../../components/Button";
 import { ChatGPTContext } from "../../../../../contexts/ChatGPTContext/ChatGPTContext";
@@ -11,10 +11,12 @@ const EditMessage = ({
   messages,
   message,
   setEdit,
+  edit,
 }: {
   messages: MessageChildProps;
   message: MessageProps;
   setEdit: Function;
+  edit: boolean;
 }) => {
   const {
     app: { current },
@@ -25,6 +27,13 @@ const EditMessage = ({
   const [value, setValue] = useState(
     message.type === "chatgpt" ? "" : message.content[0].content
   );
+  useEffect(() => {
+    if (refTextarea.current) {
+      refTextarea.current.style.height = "auto";
+      refTextarea.current.style.height =
+        refTextarea.current.scrollHeight + "px";
+    }
+  }, [refTextarea, edit]);
   return (
     <div className="w-11/12 ml-auto rounded-3xl relative pb-12 px-4 pt-4 bg-gray-200 relative">
       {loading && <Loading container overlay />}
@@ -33,12 +42,14 @@ const EditMessage = ({
         onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
           setValue(e.target.value);
           if (refTextarea.current) {
+            refTextarea.current.style.height = "auto";
             refTextarea.current.style.height =
               refTextarea.current.scrollHeight + "px";
           }
         }}
+        spellCheck={false}
         defaultValue={value}
-        className="resize-none border-none min-h-10 bg-transparent"
+        className="w-full resize-none border-none bg-transparent"
       />
       <div className="flex items-center absolute bottom-4 right-4 gap-2">
         <Button

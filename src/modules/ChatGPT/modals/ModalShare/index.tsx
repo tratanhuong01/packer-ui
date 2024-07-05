@@ -13,7 +13,7 @@ const ModalShare = ({
   //
   const [success, setSuccess] = useState(false);
   const [value, setValue] = useState("");
-  const link = `${window.location.origin}/chat-gpt/${historyId}`;
+  const link = `${window.location.origin}/chat-gpt/share/${historyId}`;
   const { handleClick, loading } = useCopyText(link, () => {
     setSuccess(true);
     setValue(link);

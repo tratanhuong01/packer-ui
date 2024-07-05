@@ -1,18 +1,44 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TransferListType from "./type";
 import ItemTransferList from "./ItemTransferList";
+import Loading from "../Loading";
 
-const TransferList = ({ items }: TransferListType) => {
+const getProducts = async () => {
+  const result = await fetch(
+    `https://657bd1e1394ca9e4af14cfed.mockapi.io/api/v1/products`
+  ).then((res) => res.json());
+  return result?.map((item: any) => ({
+    key: item.id,
+    value: item.name,
+  }));
+};
+
+const TransferList = ({ height }: TransferListType) => {
   //
-  const [current, setCurrent] = useState<any[]>(
-    [...items].map((item, index) => {
-      return { ...item, checked: false, index };
-    })
-  );
+  const [items, setItems] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      const result = await getProducts();
+      setItems(result);
+      setLoading(false);
+    };
+    fetchData();
+  }, []);
+  useEffect(() => {
+    setCurrent(
+      [...items].map((item, index) => {
+        return { ...item, checked: false, index };
+      })
+    );
+  }, [items]);
+  const [current, setCurrent] = useState<any[]>([]);
   const [selected, setSelected] = useState<any[]>([]);
   const handleChecked = (item: any, isLeft: boolean) => {
     const newData = isLeft ? [...current] : [...selected];
-    const index = newData.findIndex((_) => _.id === item.id);
+    console.log(newData);
+    const index = newData.findIndex((_) => _.key === item.key);
     if (index !== -1) {
       newData[index].checked = !newData[index].checked;
       isLeft ? setCurrent([...newData]) : setSelected([...newData]);
@@ -42,27 +68,34 @@ const TransferList = ({ items }: TransferListType) => {
   };
   //
   return (
-    <div className="flex gap-4">
+    <div
+      className="flex gap-4 overflow-hidden"
+      style={{ height: height || 420 }}
+    >
       <div
         className={`w-2/5 ${
           current.length === 0 ? "flex items-center justify-center" : ""
-        } bg-gray-100 p-4`}
+        } bg-gray-100 p-4 overflow-y-${
+          loading ? "hidden" : "scroll"
+        } rounded-lg relative`}
       >
         <ItemTransferList
           items={current.sort((a, b) => a.index - b.index)}
           handleChecked={handleChecked}
           type="left"
         />
+        {loading && <Loading container overlay />}
       </div>
-      <div className="w-1/5 flex items-center justify-center">
+      <div className="w-1/5 flex items-center justify-center h-full">
         <ul className="flex flex-col gap-4">
           <li
             onClick={() => {
-              setSelected(
-                [...items].map((item, index) => {
-                  return { ...item, checked: false, index };
-                })
-              );
+              !loading &&
+                setSelected(
+                  [...items].map((item, index) => {
+                    return { ...item, checked: false, index };
+                  })
+                );
               setCurrent([]);
             }}
             className={`${
@@ -73,7 +106,7 @@ const TransferList = ({ items }: TransferListType) => {
             justify-center border border-solid`}
           ></li>
           <li
-            onClick={() => handleClick(false)}
+            onClick={() => !loading && handleClick(false)}
             className={`${
               current.filter((item) => item.checked).length === 0
                 ? "opacity-80 cursor-not-allowed cursor-pointer text-gray-500 border-gray-300"
@@ -82,7 +115,7 @@ const TransferList = ({ items }: TransferListType) => {
             justify-center border border-solid`}
           ></li>
           <li
-            onClick={() => handleClick(true)}
+            onClick={() => !loading && handleClick(true)}
             className={`${
               selected.filter((item) => item.checked).length === 0
                 ? "opacity-80 cursor-not-allowed cursor-pointer text-gray-500 border-gray-300"
@@ -92,6 +125,7 @@ const TransferList = ({ items }: TransferListType) => {
           ></li>
           <li
             onClick={() => {
+              if (loading) return;
               setCurrent(
                 [...items].map((item, index) => {
                   return { ...item, checked: false, index };
@@ -111,13 +145,16 @@ const TransferList = ({ items }: TransferListType) => {
       <div
         className={`w-2/5 ${
           selected.length === 0 ? "flex items-center justify-center" : ""
-        } bg-gray-100 p-4`}
+        } bg-gray-100 p-4 overflow-y-${
+          loading ? "hidden" : "scroll"
+        } rounded-lg relative`}
       >
         <ItemTransferList
           items={selected.sort((a, b) => a.index - b.index)}
           handleChecked={handleChecked}
           type="right"
         />
+        {loading && <Loading container overlay />}
       </div>
     </div>
   );

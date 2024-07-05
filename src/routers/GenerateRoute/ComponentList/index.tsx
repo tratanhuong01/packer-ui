@@ -58,7 +58,7 @@ const transferList: ItemGenerateChild = {
   id: Math.random(),
   name: "Transfer List",
   type: "app",
-  component: <TransferList items={[]} />,
+  component: <TransferList getItems={async () => []} />,
 };
 const pagination: ItemGenerateChild = {
   id: Math.random(),

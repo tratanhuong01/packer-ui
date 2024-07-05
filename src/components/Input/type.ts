@@ -12,6 +12,10 @@ type InputProps = {
     handleStart: () => void;
     handleCallback: (val: string) => void;
   };
+  rightContent?: {
+    label: string;
+    handle: Function;
+  };
 };
 
 export default InputProps;

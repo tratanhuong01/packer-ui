@@ -7,6 +7,7 @@ import ContentPage from "../modules/Admin/ContentPage";
 import Code from "../pages/Code";
 import Projects from "../pages/projects";
 import ChatGPT from "../modules/ChatGPT";
+import ShareHistory from "../modules/ChatGPT/components/ShareHistory";
 
 const Router = () => {
   return (
@@ -26,6 +27,14 @@ const Router = () => {
               <div className="w-full h-screen overflow-hidden">
                 <ChatGPT />
               </div>
+            }
+          />
+          <Route
+            path={"/chat-gpt/share/:historyId"}
+            element={
+              <ChatGPT>
+                <ShareHistory />
+              </ChatGPT>
             }
           />
           <Route

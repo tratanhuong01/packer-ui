@@ -82,11 +82,11 @@ const Button = (
       } px-4 ${generateClassMode()} ${
         !mode ? "text-button" : ""
       } disabled:bg-gray-600 disabled:hover:bg-gray-500 disabled:text-white disabled:cursor-not-allowed flex 
-      items-center justify-center ${className} disabled:border-gray-500`}
+      items-center justify-center ${className} disabled:border-gray-500 hover:bg-opacity-80`}
       style={{
         width:
           typeof width === "string" ? width : width ? `${width}px` : "auto",
-        height: height ? `${height}px` : 36,
+        height: height ? `${height}px` : 42,
       }}
       disabled={mode === "disabled" || disabled}
     >

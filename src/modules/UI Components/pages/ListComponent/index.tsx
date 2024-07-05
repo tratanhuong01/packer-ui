@@ -2,8 +2,10 @@ import Alert from "../../../../components/Alert";
 import AutoComplete from "../../../../components/AutoComplete";
 import Button from "../../../../components/Button";
 import Calendar from "../../../../components/Calendar";
+import Login from "../../../../components/Login";
 import Pagination from "../../../../components/Pagination";
 import Rating from "../../../../components/Rating";
+import Register from "../../../../components/Register";
 import RenderData from "../../../../components/RenderData";
 import StepByStep from "../../../../components/StepByStep";
 import Table from "../../../../components/Table";
@@ -16,6 +18,24 @@ import ShowComponent from "../../components/ShowComponent";
 const ListComponent = () => {
   return (
     <div>
+      <p className="font-bold text-4xl mb-2 mt-8">Register module</p>
+      <ShowComponent
+        component={
+          <div className="w-1/3 mx-auto flex justify-center">
+            <Register />
+          </div>
+        }
+        code={{ expand: "RenderData Expand", collapse: "RenderData Collapse" }}
+      />
+      <p className="font-bold text-4xl mb-2 mt-8">Login module</p>
+      <ShowComponent
+        component={
+          <div className="w-1/3 mx-auto flex justify-center">
+            <Login />
+          </div>
+        }
+        code={{ expand: "RenderData Expand", collapse: "RenderData Collapse" }}
+      />
       <p className="font-bold text-4xl mb-2 mt-8">AutoComplete</p>
       <ShowComponent
         component={
@@ -60,18 +80,23 @@ const ListComponent = () => {
         component={
           <div className="w-11/12 mx-auto">
             <TransferList
-              items={[
-                { id: 1, name: "John Doe" },
-                { id: 2, name: "Jane Smith" },
-                { id: 3, name: "Robert Johnson" },
-                { id: 4, name: "Emily Davis" },
-                { id: 5, name: "Michael Wilson" },
-                { id: 6, name: "Elizabeth Brown" },
-                { id: 7, name: "Christopher Martin" },
-                { id: 8, name: "Olivia White" },
-                { id: 9, name: "William Moore" },
-                { id: 10, name: "Sophia Anderson" },
-              ]}
+              getItems={async () => {
+                return [
+                  { id: 1, name: "John Doe" },
+                  { id: 2, name: "Jane Smith" },
+                  { id: 3, name: "Robert Johnson" },
+                  { id: 4, name: "Emily Davis" },
+                  { id: 5, name: "Michael Wilson" },
+                  { id: 6, name: "Elizabeth Brown" },
+                  { id: 7, name: "Christopher Martin" },
+                  { id: 8, name: "Olivia White" },
+                  { id: 9, name: "William Moore" },
+                  { id: 10, name: "Sophia Anderson" },
+                ].map((item) => ({
+                  key: item.id.toString(),
+                  value: item.name,
+                }));
+              }}
             />
           </div>
         }

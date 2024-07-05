@@ -25,6 +25,7 @@ const Input = (props: InputProps & InputHTMLAttributes<HTMLInputElement>) => {
     error,
     disabled,
     debounce,
+    rightContent,
   } = props;
   const [data, setData] = useState({
     showPassword: false,
@@ -51,6 +52,7 @@ const Input = (props: InputProps & InputHTMLAttributes<HTMLInputElement>) => {
     delete temp.error;
     delete temp.debounce;
     delete temp.mode;
+    delete temp.rightContent;
     return temp;
   };
   const mode = props.mode || "normal";
@@ -70,14 +72,28 @@ const Input = (props: InputProps & InputHTMLAttributes<HTMLInputElement>) => {
   return (
     <div
       ref={refContainer.ref}
-      className={`input__container flex flex-col gap-3 ${
+      className={`input__container flex flex-col gap-2 ${
         className || ""
       }`.trim()}
     >
       {props.label && (
-        <div className="flex items-center gap-1">
-          <p className="font-semibold text-gray-600">{props.label}</p>
-          {props.required && <span className="text-red-500 font-bold">*</span>}
+        <div className="flex justify-between items-center">
+          <div className="flex items-center gap-1">
+            <p className="font-semibold text-gray-600">{props.label}</p>
+            {props.required && (
+              <span className="text-red-500 font-bold">*</span>
+            )}
+          </div>
+          {rightContent && (
+            <p
+              onClick={() => {
+                rightContent.handle();
+              }}
+              className="text-gray-600 cursor-pointer"
+            >
+              {rightContent.label}
+            </p>
+          )}
         </div>
       )}
       <div

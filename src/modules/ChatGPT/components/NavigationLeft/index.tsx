@@ -21,12 +21,12 @@ const NavigationLeft = () => {
   const { loginWithPopup } = useAuth0();
   const navigate = useNavigate();
   //
-  return fullScreen ? (
+  return !fullScreen ? (
     <Parent className="w-72 flex flex-col py-2 px-3 bg-gray-100 bg-opacity-50">
       <div className="flex items-center justify-between">
         <div
           onClick={() => {
-            dispatch(updateData({ key: "fullScreen", value: false }));
+            dispatch(updateData({ key: "fullScreen", value: true }));
           }}
           className={`${box}`}
         >
