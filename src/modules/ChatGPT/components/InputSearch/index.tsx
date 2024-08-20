@@ -73,10 +73,11 @@ const InputSearch = ({ scrollTop }: { scrollTop: Function }) => {
         refTextarea.current.style.height = "";
       } else {
         refTextarea.current.style.height = "auto";
+        const numberLine = refTextarea.current.value
+          .substring(0, refTextarea.current.selectionStart)
+          .split("\n").length;
         refTextarea.current.style.height =
-          refTextarea.current.scrollHeight === 45
-            ? ""
-            : refTextarea.current.scrollHeight + "px";
+          numberLine === 1 ? "" : (28 * numberLine).toString() + "px";
       }
     }
   };

@@ -199,7 +199,7 @@ const StartSearch = ({ isShare }: { isShare?: boolean }) => {
             <i className="bx bx-down-arrow-alt" />
           </Box>
         )}
-        <div ref={ref} className="flex-1 pt-20 pt-10 overflow-y-auto px-3">
+        <div ref={ref} className="flex-1 pt-16 overflow-y-auto px-3">
           {current &&
             current.messages.map((messages) => (
               <ContentSearch
